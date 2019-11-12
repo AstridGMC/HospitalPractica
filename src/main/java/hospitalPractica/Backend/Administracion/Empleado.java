@@ -6,6 +6,7 @@
 package hospitalPractica.Backend.Administracion;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -14,12 +15,14 @@ import java.sql.SQLException;
  * @author astridmc
  */
 public class Empleado {
-
+    
     private String nombre;
     private String apellido;
     private String rango;
     private String celular;
     private String cui;
+    private Date fechaVacacionesInicio;
+    private Date fechaVacacionesFinal;
     private int salario;
 
     public String getNombre() {
@@ -54,8 +57,6 @@ public class Empleado {
         this.salario = salario;
     }
 
-    
-    
     public String getRango() {
         return rango;
     }
@@ -71,9 +72,26 @@ public class Empleado {
     public void setCelular(String celular) {
         this.celular = celular;
     }
+
+    public Date getFechaVacacionesInicio() {
+        return fechaVacacionesInicio;
+    }
+
+    public void setFechaVacacionesInicio(Date fechaVacacionesInicio) {
+        this.fechaVacacionesInicio = fechaVacacionesInicio;
+    }
+
+    public Date getFechaVacacionesFinal() {
+        return fechaVacacionesFinal;
+    }
+
+    public void setFechaVacacionesFinal(Date fechaVacacionesFinal) {
+        this.fechaVacacionesFinal = fechaVacacionesFinal;
+    }
+    
+    
     
     public boolean nuevoEmpleado(Connection conexion){
-        
         PreparedStatement ps1 = null;
         try {
             String consulta ="INSERT INTO Empleado (cuiEmpleado, nombres, apellidos, salario)"
@@ -86,7 +104,7 @@ public class Empleado {
             ps1.executeUpdate();
             System.out.println("guardado");
             return true;
-        } catch (SQLException e) {
+        } catch (SQLException e){
             System.out.println("error guardando Empleado" + e);
             return false;
         }
@@ -102,7 +120,7 @@ public class Empleado {
             ps1.executeUpdate();
             System.out.println("salario Guardado");
             return true;
-        } catch (SQLException e) {
+        } catch (SQLException e){
             System.out.println("error No se ha modificado el salario "+ e);
             return false;
         }

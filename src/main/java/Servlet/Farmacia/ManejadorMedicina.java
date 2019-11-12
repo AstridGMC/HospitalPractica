@@ -61,7 +61,7 @@ public class ManejadorMedicina extends HttpServlet {
         if("ActualizarMedicina".equals(request.getParameter("pagina"))){
             ArrayList <Medicina> medicinas= inventario.listarExistencias(conexion);
             request.setAttribute("medicinasActualizar", medicinas);
-            getServletContext().getRequestDispatcher("/DocumentosWeb/Farmacia/editarMedicina.jsp").forward(request, response);
+            getServletContext().getRequestDispatcher("/DocumentosWeb/Administracion/ingresarNuevaConsulta.jsp").forward(request, response);
         }
     }
 
@@ -96,7 +96,7 @@ public class ManejadorMedicina extends HttpServlet {
                     out.println("</script>");
                     response.sendRedirect("DocumentosWeb/Farmacia/medicinaNueva.jsp");
                 } else {
-                    out.println("<script type=\"text/javascript\">");
+                    out.println("<script>");
                     out.println("alert('No se ha guardado la medicina');");
                     out.println("location='DocumentosWeb/Farmacia/medicinaNueva.jsp';");
                     out.println("</script>");

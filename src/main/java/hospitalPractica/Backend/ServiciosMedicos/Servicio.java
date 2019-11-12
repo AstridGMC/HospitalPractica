@@ -113,4 +113,26 @@ public class Servicio {
         }
         return list;
     }
+    
+     public  ArrayList<String> listarNombreServicios(Connection conexion){
+        PreparedStatement ps1;
+        ResultSet rs;
+        Servicio misServicios;
+        ArrayList<String> list = new ArrayList<>();
+        String sql = "SELECT * FROM ServiciosHospital";
+        try {
+            ps1 = conexion.prepareStatement(sql);
+            rs = ps1.executeQuery();
+       
+            while (rs.next()) {
+                System.out.println(rs.getRow());
+                String servicioNombre;
+                servicioNombre = rs.getString("nombreServicio");
+                list.add(servicioNombre);
+            }
+        } catch (SQLException e) {
+            System.out.println("no se encontraron servicios " + e);
+        }
+        return list;
+    }
 }

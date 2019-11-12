@@ -15,7 +15,7 @@ import java.sql.SQLException;
  * @author astridmc
  */
 public class AreaHospital {
-    private int AreaHospital;
+    private int idAreaHospital;
     private String nombreArea;
     
     public boolean nuevaAreaHospital(Connection conexion){
@@ -24,7 +24,7 @@ public class AreaHospital {
             String consulta ="INSERT INTO AreasHospital ( nombreArea)"
                 + " VALUES (?);";
             ps1= conexion.prepareStatement(consulta);
-            ps1.setInt(1, AreaHospital);
+            ps1.setString(1, nombreArea);
             ps1.executeUpdate();
             System.out.println("nueva Area Guardado ");
             return true;

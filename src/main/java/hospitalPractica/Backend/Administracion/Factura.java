@@ -17,7 +17,7 @@ public class Factura {
     private int idFactura;
     private String fechaFactura;
     private String Cliente;
-    private String Monto;
+    private String monto;
     private String nombreArea;
 
     public int getIdFactura() {
@@ -45,11 +45,11 @@ public class Factura {
     }
 
     public String getMonto() {
-        return Monto;
+        return monto;
     }
 
     public void setMonto(String Monto) {
-        this.Monto = Monto;
+        this.monto = Monto;
     }
 
     public String getNombreArea() {

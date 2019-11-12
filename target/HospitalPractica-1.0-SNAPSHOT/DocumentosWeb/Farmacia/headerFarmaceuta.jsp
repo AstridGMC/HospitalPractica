@@ -5,7 +5,7 @@
 --%>
 
 <link href= "<%=request.getContextPath()%>/bootstrap/css/estiloBarra.css" rel="stylesheet" type ="text/css">
-<link href = "bootstrap/css/bootstrap.min.css" rel="stylesheet" type ="text/css">
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%

@@ -62,8 +62,8 @@ public class Paciente {
             ps1.setString(1, cui);
             ps1.setString(2, nombres);
             ps1.setString(3, apellidos);
-            ps1.setString(3, telefono);
-            ps1.setString(4, correoElectronico);
+            ps1.setString(4, telefono);
+            ps1.setString(5, correoElectronico);
             ps1.executeUpdate();
             System.out.println("Paciente guardado");
             return true;

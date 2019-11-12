@@ -15,6 +15,7 @@ import java.sql.SQLException;
  * @author astridmc
  */
 public class Medicina {
+
     private String nombre;
     private float precio;
     private float costo;
@@ -69,29 +70,35 @@ public class Medicina {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-    
-    
-    public boolean nuevaMedicina(Connection conexion){
+
+    public boolean nuevaMedicina(Connection conexion) {
+        Inventario inventario = new Inventario();
         PreparedStatement ps1 = null;
         try {
-            String consulta ="INSERT INTO Medicina (nombreProducto, descripcion, precio, costo, existenciaMinima)"
-                + " VALUES (?,?,?,?,?);";
-            ps1= conexion.prepareStatement(consulta);
+            String consulta = "INSERT INTO Medicina (nombreProducto, descripcion, precio, costo, existenciaMinima)"
+                    + " VALUES (?,?,?,?,?);";
+            ps1 = conexion.prepareStatement(consulta);
             ps1.setString(1, nombre);
             ps1.setString(2, descripcion);
             ps1.setFloat(3, precio);
             ps1.setFloat(4, costo);
             ps1.setInt(5, existenciaMinima);
-            ps1.executeUpdate();
-            System.out.println("Medicina Guardada ");
-            return true;
+            if (ps1.executeUpdate() == 1) {
+                inventario.setExistencia(existencia);
+                inventario.setNombre(nombre);
+                inventario.agregarProductoInventario(conexion);
+                System.out.println("Medicina Guardada ");
+                return true;
+            }else{
+                return false;
+            }
         } catch (SQLException e) {
             System.out.println("error guardando Medicina" + e);
             return false;
         }
     }
-    
-    public Medicina  detallarMedicina(Connection conexion, String nombreProducto){
+
+    public Medicina detallarMedicina(Connection conexion, String nombreProducto) {
         Medicina medicina = new Medicina();
         PreparedStatement ps1;
         ResultSet rs;
@@ -111,10 +118,9 @@ public class Medicina {
             return null;
         }
     }
-    
-    
+
     //usamos existencia para agregar la cantidad de medicina vendida a un paciente
-     public Medicina  detallarMedicinaVenta(Connection conexion, String nombreProducto, int cantidad){
+    public Medicina detallarMedicinaVenta(Connection conexion, String nombreProducto, int cantidad) {
         Medicina medicina = new Medicina();
         PreparedStatement ps1;
         ResultSet rs;
@@ -133,20 +139,20 @@ public class Medicina {
             return null;
         }
     }
-    
-    public void ObtenerexistenciaMinima(Connection conexion, String nombreMedicina){
+
+    public void ObtenerexistenciaMinima(Connection conexion, String nombreMedicina) {
         PreparedStatement obtenerExistencia = null;
-        
+
         try {
             String consulta1 = "SELECT existenciaMinima  FROM Medicina WHERE nombreProducto= ?;";
             obtenerExistencia = conexion.prepareStatement(consulta1);
             obtenerExistencia.setString(1, nombreMedicina);
             ResultSet rs = obtenerExistencia.executeQuery();
             System.out.println(rs.first());
-            existenciaMinima  = rs.getInt("existenciaMinima");
+            existenciaMinima = rs.getInt("existenciaMinima");
             System.out.println(existenciaMinima);
         } catch (SQLException e) {
-            System.out.println("existenciaMinima no encontrada " + e );
+            System.out.println("existenciaMinima no encontrada " + e);
         }
-    }    
+    }
 }

@@ -2,6 +2,7 @@ hospitalPractica/Backend/ServiciosMedicos/ManejadorDeAtencion.class
 hospitalPractica/Backend/Usuario.class
 hospitalPractica/Backend/Administracion/CuartoHospital.class
 hospitalPractica/Backend/Farmacia/RegistradorVentaMedicina.class
+Servlet/Pacientes/ManejadorPaciente.class
 Servlet/ControlerImage.class
 hospitalPractica/Backend/Farmacia/Farmaceuta.class
 hospitalPractica/Backend/Farmacia/Medicina.class

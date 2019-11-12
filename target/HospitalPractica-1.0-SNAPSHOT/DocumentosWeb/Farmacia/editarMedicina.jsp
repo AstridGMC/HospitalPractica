@@ -15,7 +15,7 @@
     </head>
     <body>
         <%@include  file= "headerFarmaceuta.jsp"%>
-        <div  style="padding-top: 320px; padding-left: 16%;">
+        <div  style="padding-top: 320px; padding-left: 14%; padding-right: 300px;">
             <div>
                 <table class="table">
                     <thead>
@@ -31,7 +31,7 @@
 
                     <%                    
                         ArrayList<Medicina> medicinas = (ArrayList) request.getAttribute("medicinasActualizar");
-                        System.out.println(medicinas.size());
+                        System.out.println(medicinas.size()+ "  tamanio arreglo medicina");
                         for (int i = 0; i < medicinas.size(); i++) {
                             Medicina medicina = medicinas.get(i);
                             String nombreMedicina = medicina.getNombre();
@@ -40,11 +40,11 @@
 
                     <tr> 
                     
-                        <td name = "nombreProducto" > <imput id="11"type ="text" value="<%=medicina.getNombre()%>"></imput></td>
-                        <td name = "descripcion" > <imput id ="22" type ="text" value="<%=medicina.getDescripcion()%>"></imput></td>
-                        <td name = "existenciaMin" > <imput id="33" type ="text" value="<%=medicina.getExistenciaMinima()%>"></imput> </td>
-                        <td name = "Precio" > <imput id="44" type ="text" value="<%=medicina.getPrecio()%>"> </imput></td>
-                        <td name = "Costo" > <imput id="55" type ="text" value="<%=medicina.getCosto()%> "> </imput></td>
+                        <td name = "nombreProducto" > <div><input type="text" id="11" value="<%=medicina.getNombre()%>"></input> </div></td>
+                        <td name = "descripcion" ><div> <input type="text" id ="22"   value="<%=medicina.getDescripcion()%>"></imput></div></td>
+                        <td name = "existenciaMin" > <div><input style="width: 100px;" id="33" type="number"  value="<%=medicina.getExistenciaMinima()%>"> </div> </td>
+                        <td name = "Precio" > <div ><input style="width: 100px;"id="44" type="number"  value="<%=medicina.getPrecio()%>"> </div></td>
+                        <td name = "Costo" > <div><input style="width: 100px;" id="55" type ="number" value="<%=medicina.getCosto()%>"> </div> </td>
                         <td name = "suscribir" >
                             <form action='<%=request.getContextPath()%>/#' method='POST'>
                                 <div class="alert alert-success alert-dismissable">
