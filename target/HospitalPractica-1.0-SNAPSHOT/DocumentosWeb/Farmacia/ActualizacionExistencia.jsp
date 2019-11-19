@@ -10,6 +10,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link href = "<%=request.getContextPath()%>/bootstrap/css/bootstrap.min.css" rel="stylesheet" type ="text/css">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Actualizar Existencia</title>
     </head>
@@ -23,6 +24,7 @@
                             <th scope="col">Nombre</th>
                             <th scope="col">Descripcion</th>
                             <th scope="col">Existencia Actual</th>
+                            <th scope="col">Existencia Minima</th>
                             <th scope="col">Existencia Actualizada</th>
                         </tr>
                     </thead>
@@ -40,7 +42,12 @@
                         <td name = "nombreProducto" > <%=medicina.getNombre()%> </td>
                         <td name = "descripcion" > <%=medicina.getDescripcion()%> </td>
                         <td name = "existencia" > <%=medicina.getExistencia()%> </td>
-                        <td name = "suscribir" ><form action='<%=request.getContextPath()%>/#' method='POST'><div class="alert alert-success alert-dismissable">
+                        <%if(medicina.getExistencia()<= medicina.getExistenciaMinima()){%>
+                        <td name = "existencia" style="background-color: #f1b0b7" > <%=medicina.getExistenciaMinima()%> </td>
+                        <%}else{%>
+                            <td name = "existencia" > <%=medicina.getExistenciaMinima()%> </td>
+                         <%}%>
+                        <td name = "suscribir" ><form action='<%=request.getContextPath()%>/ActualizarInventario' method='POST'><div class="alert alert-success alert-dismissable">
                                     <input name='medincinaNombre'  value='<%=medicina.getNombre()%>' style="display:none" >
                                     <input type="number"  name='existenciaActual'><input type="submit"  value="Guardar"></div></form></td>
 

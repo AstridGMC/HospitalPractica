@@ -17,13 +17,13 @@ import java.sql.SQLException;
 import javax.servlet.http.HttpServletResponse;
 
 public class Usuario {
+
     private String cui;
     private String password;
     private String nombreUsuario;
     private String rango;
     private InputStream foto;
-    
-    
+
     public String getNombreUsuario() {
         return nombreUsuario;
     }
@@ -63,11 +63,10 @@ public class Usuario {
     public void setFoto(InputStream foto) {
         this.foto = foto;
     }
-    
-    
-      public String validarNombre(Connection conexion){
+
+    public String validarNombre(Connection conexion) {
         PreparedStatement validarNombre = null;
-        
+
         System.out.println(nombreUsuario);
         System.out.println(password);
         try {
@@ -84,17 +83,47 @@ public class Usuario {
         }
     }
 
+    public boolean validarCrearUsuario(Connection conexion, String rango) {
+        if (rango.equals("Administrador")) {
+            if (crearNuevoUsuario(conexion)) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if (rango.equals("Enfermero")) {
+            if (crearNuevoUsuario(conexion)) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if (rango.equals("Farmaceuta")) {
+            if (crearNuevoUsuario(conexion)) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if (rango.equals("Recepcionista")) {
+            if (crearNuevoUsuario(conexion)) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
     public boolean crearNuevoUsuario(Connection conexion) {
         PreparedStatement ps1 = null;
-        boolean uno = false;
         try {
-            String consulta = "INSERT INTO Usuario (nombreUsuario, passwordUser, rango) VALUES (?,?,?);";
+            String consulta = "INSERT INTO Usuario (nombreUsuario, password, rango, cuiUsuario) VALUES (?,?,?,?);";
             ps1 = conexion.prepareStatement(consulta);
             ps1.setString(1, nombreUsuario);
             ps1.setString(2, password);
             ps1.setString(3, rango);
+            ps1.setString(4, cui);
             ps1.executeUpdate();
-            System.out.println("guardado");
+            System.out.println("guardado en usuarios" +rango);
             return true;
         } catch (SQLException e) {
             System.out.println("error " + e);
@@ -122,8 +151,8 @@ public class Usuario {
             return "rango nulo";
         }
     }
-    
-     public String obtenerCUI(Connection conexion) {
+
+    public String obtenerCUI(Connection conexion) {
         PreparedStatement obtenerCUI = null;
 
         System.out.println(nombreUsuario);
@@ -144,8 +173,8 @@ public class Usuario {
             return "cui Usuario nulo";
         }
     }
-    
-    public String obtenerNombre(Connection conexion, String cui){
+
+    public String obtenerNombre(Connection conexion, String cui) {
         PreparedStatement obtenerNombre;
         try {
             String consulta1 = "SELECT nombres , apellidos  FROM Empleado WHERE cuiEmpleado= ?;";
@@ -154,55 +183,55 @@ public class Usuario {
             ResultSet rs = obtenerNombre.executeQuery();
             System.out.println(rs.first());
             String miNombre = rs.getString("nombres");
-            String miApellido= rs.getString("apellidos");
-            return miNombre + " "+ miApellido;
+            String miApellido = rs.getString("apellidos");
+            return miNombre + " " + miApellido;
         } catch (SQLException e) {
             System.out.println("nombre nulo " + e);
             return null;
         }
     }
-    
+
     public void obtenerFoto(Connection con, String cui, HttpServletResponse response) {
         PreparedStatement ps;
-        ResultSet rs; 
+        ResultSet rs;
         String sql = "select * from Usuario where cuiUsuario= '" + cui + "';";
         InputStream inputStream = null;
         OutputStream outputStream = null;
         BufferedInputStream bufferedInputStream = null;
         BufferedOutputStream bufferedOutputStream = null;
         response.setContentType("image/*");
-        
+
         try {
             outputStream = response.getOutputStream();
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
             rs.first();
             inputStream = rs.getBinaryStream("foto");
-           
+
             bufferedInputStream = new BufferedInputStream(inputStream);
             bufferedOutputStream = new BufferedOutputStream(outputStream);
-            int i=0;
-             System.out.println("obteniendo imagen");
+            int i = 0;
+            System.out.println("obteniendo imagen");
             while ((i = bufferedInputStream.read()) != -1) {
                 bufferedOutputStream.write(i);
             }
-        } catch (IOException | SQLException e ) {
-            System.out.println("error leyendo imagen "+e);
+        } catch (IOException | SQLException e) {
+            System.out.println("error leyendo imagen " + e);
         }
     }
-    
-    public void guardarPerfil(Usuario user,Connection con){
-        String sql="UPDATE  Usuario SET foto=? nombreUsuario=? WHERE cuiUsuario= '"+user.getCui()+"';";
+
+    public void guardarPerfil(Usuario user, Connection con) {
+        String sql = "UPDATE  Usuario SET foto=? nombreUsuario=? WHERE cuiUsuario= '" + user.getCui() + "';";
         PreparedStatement ps;
         try {
-            ps=con.prepareStatement(sql);
-            ps.setBlob(1,user.getFoto());
+            ps = con.prepareStatement(sql);
+            ps.setBlob(1, user.getFoto());
             ps.setString(2, user.getNombreUsuario());
             ps.executeUpdate();
-            
+
             System.out.println("Perfil  Guardado");
         } catch (SQLException e) {
-            System.out.println("error No se ha guardado el Perfil"+ e);
+            System.out.println("error No se ha guardado el Perfil" + e);
         }
     }
 

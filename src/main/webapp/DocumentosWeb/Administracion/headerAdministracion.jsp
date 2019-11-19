@@ -5,8 +5,6 @@
 --%>
 
 <link href= "<%=request.getContextPath()%>/bootstrap/css/estiloBarra.css" rel="stylesheet" type ="text/css">
-<link href = "bootstrap/css/bootstrap.min.css" rel="stylesheet" type ="text/css">
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     String cui = (String) session.getAttribute("cui");
@@ -34,11 +32,11 @@
                         <i class="fa fa-caret-down"></i>
                     </button>
                     <div class="dropdown-content1">
-                        <a href="#">Contratos</a>
-                        <a href="#">Despidos</a>
-                        <a href="#">Cambio de Vacaciones</a>
-                        <a href="#">Vacaciones Recividas</a>
-                        <a href="#">Aumentos</a>
+                        <a href="<%=request.getContextPath()%>/Empleados?pm=contratoNuevo">Contrato Nuevo</a>
+                        <a href="<%=request.getContextPath()%>/DocumentosWeb/Administracion/terminarContrato.jsp">Fin de Contrato</a>
+                        <a href="<%=request.getContextPath()%>/Vacaciones?pm=cambiarVacaciones">Cambio de Vacaciones</a>
+                        <a href="<%=request.getContextPath()%>/DocumentosWeb/Administracion/registrarVaccionesRecividas.jsp">Vacaciones Recividas</a>
+                        <a href="<%=request.getContextPath()%>/DocumentosWeb/Administracion/aumentosEmpleado.jsp">Aumentos</a>
                     </div>
                 </div>
                 <div class="dropdown3">
@@ -46,9 +44,9 @@
                         <i class="fa fa-caret-down"></i>
                     </button>
                     <div class="dropdown-content1">
-                        <a href="#">Cambiar Dias de Vacaciones</a>
-                        <a href="#">Agregar Nueva Area</a>
-                        <a href="#">Agregar Habitacion nueva</a>
+                        <a href="<%=request.getContextPath()%>/Vacaciones?pm=Cambiar Numero De Dias">Cambiar Dias de Vacaciones</a>
+                        <a href="<%=request.getContextPath()%>/Administracion?pm=nuevaArea">Agregar Nueva Area</a>
+                        <a href="<%=request.getContextPath()%>/Administracion?pm=numeroHabitacion">Agregar Habitacion nueva</a>
                     </div>
                 </div>
                 <div class="dropdown3">
@@ -56,9 +54,8 @@
                         <i class="fa fa-caret-down"></i>
                     </button>
                     <div class="dropdown-content1">
-                        <a href="#">Medicina</a>
-                        <a href="#">Mantenimiento de Habitaciones</a>
-                        <a href="#">Habitaciones</a>
+                        <a href="<%=request.getContextPath()%>/Administracion?pm=modificacionMedicina1">Medicina</a>
+                        <a href="<%=request.getContextPath()%>/Administracion?pm=modificacionHabitaciones">Mantenimiento de Habitaciones</a>
                     </div>
                 </div>
                  <div class="dropdown3">
@@ -66,7 +63,7 @@
                         <i class="fa fa-caret-down"></i>
                     </button>
                     <div class="dropdown-content1">
-                        <a href="#">Empleados</a>
+                        <a href="<%=request.getContextPath()%>/ReportesAdmin?pm=reportesEmpleados">Empleados</a>
                         <a href="#">Ganancias</a>
                         <a href="#">Habitaciones</a>
                     </div>
@@ -75,3 +72,5 @@
         </nav>
     </div>
 </header>
+                    
+                    

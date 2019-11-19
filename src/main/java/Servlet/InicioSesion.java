@@ -59,10 +59,10 @@ public class InicioSesion extends HttpServlet {
                 response.sendRedirect("/index.jsp");
             } else {
                 System.out.println(mirango);
-                if ("Medico".equals(mirango)) {
+                if ("Recepcionista".equals(mirango)) {
                     System.out.println(mirango);
                     request.getSession().setAttribute("nombreDelUsuario",user.getNombreUsuario());
-                    response.sendRedirect("DocumentosWeb/InicioEditor.jsp");
+                    response.sendRedirect("DocumentosWeb/Recepcion/paginaInicioR.jsp");
                 } else if ("Farmaceuta".equals(mirango)) {
                     System.out.println(mirango);
                     request.getSession().setAttribute("nombreDelUsuario",user.getNombreUsuario());
@@ -71,11 +71,11 @@ public class InicioSesion extends HttpServlet {
                  else if ("Enferfero".equals(mirango)) {
                     System.out.println(mirango);
                     request.getSession().setAttribute("nombreDelUsuario",user.getNombreUsuario());
-                    response.sendRedirect("DocumentosWeb/inicioSuscriptor.jsp");
+                    response.sendRedirect("DocumentosWeb/Enferemeria/paginaInicioE.sp");
                 }else if (mirango.equals("Administrador")) {
                     System.out.println(mirango);
                     request.getSession().setAttribute("nombreDelUsuario",user.getNombreUsuario());
-                    response.sendRedirect("DocumentosWeb/inicioAdministrador.jsp");
+                    response.sendRedirect("DocumentosWeb/Administracion/paginaInicioA.jsp");
                 }
                 
             }

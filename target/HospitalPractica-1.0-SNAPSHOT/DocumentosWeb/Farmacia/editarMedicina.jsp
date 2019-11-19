@@ -10,6 +10,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link href = "<%=request.getContextPath()%>/bootstrap/css/bootstrap.min.css" rel="stylesheet" type ="text/css">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Editar Medina</title>
     </head>
@@ -29,9 +30,8 @@
                         </tr>
                     </thead>
 
-                    <%                    
-                        ArrayList<Medicina> medicinas = (ArrayList) request.getAttribute("medicinasActualizar");
-                        System.out.println(medicinas.size()+ "  tamanio arreglo medicina");
+                    <%                        ArrayList<Medicina> medicinas = (ArrayList) request.getAttribute("medicinasActualizar");
+                        System.out.println(medicinas.size() + "  tamanio arreglo medicina");
                         for (int i = 0; i < medicinas.size(); i++) {
                             Medicina medicina = medicinas.get(i);
                             String nombreMedicina = medicina.getNombre();
@@ -39,24 +39,21 @@
                     %>
 
                     <tr> 
-                    
-                        <td name = "nombreProducto" > <div><input type="text" id="11" value="<%=medicina.getNombre()%>"></input> </div></td>
-                        <td name = "descripcion" ><div> <input type="text" id ="22"   value="<%=medicina.getDescripcion()%>"></imput></div></td>
-                        <td name = "existenciaMin" > <div><input style="width: 100px;" id="33" type="number"  value="<%=medicina.getExistenciaMinima()%>"> </div> </td>
-                        <td name = "Precio" > <div ><input style="width: 100px;"id="44" type="number"  value="<%=medicina.getPrecio()%>"> </div></td>
-                        <td name = "Costo" > <div><input style="width: 100px;" id="55" type ="number" value="<%=medicina.getCosto()%>"> </div> </td>
+                    <form action='<%=request.getContextPath()%>/RegistradorMedicina' method='POST'>
+                         <td name = "nombreProducto" id="11" value="<%=medicina.getNombre()%>"><%=medicina.getNombre()%></td>
+                        <td ><div> <input  name = "descripcion" oninput="capturar();" type="text" id ="22"   value= ' <%=medicina.getDescripcion()%>'></div></td>
+                        <td  > <div><input name = "existenciaMinima" style="width: 100px;" id="33" type="number"  value="<%=medicina.getExistenciaMinima()%>"> </div> </td>
+                        <td  > <div ><input  name = "precio" style="width: 100px;"id="44" type="number"  value="<%=medicina.getPrecio()%>"> </div></td>
+                        <td  > <div><input  name = "costo" style="width: 100px;" id="55" type ="number" value="<%=medicina.getCosto()%>"> </div> </td>
                         <td name = "suscribir" >
-                            <form action='<%=request.getContextPath()%>/#' method='POST'>
-                                <div class="alert alert-success alert-dismissable">
-                                <input name='medincinaNombre'  style="display:none" >
-                                <input name='nombreActualizado' id="1"   style="display:none" >
-                                <input name='descripcion'  id="2" style="display:none" >
-                                <input name='existenciaMinima'  id="3" style="display:none" >
-                                <input name='precio'  id="4" style="display:none" >
-                                <input name='costo'  id="5" style="display:none" >
-                                <input onclick="capturar()" type="submit"  name="boton"  value="actualizarMedicina"></div>
-                            </form>
+                            <input name="existencia" value="<%=medicina.getExistencia()%>" style="display: none;">
+                            <input name="nombre" value="<%=medicina.getNombre()%>" style="display: none;">
+                            <div class="alert alert-success alert-dismissable">
+                               
+                                <input type="submit"  name="boton"  value="actualizarMedicina"></div>
+
                         </td>
+                    </form>
                     </tr>
                     <%}%>
                 </table>
@@ -64,19 +61,19 @@
         </div>
     </body>
     <script>
-        function capturar()
-    {
-        
-       var nombre = document.getElementById("11").value;
-        var descripcion = document.getElementById("22").value;
-        var existenciaMin = document.getElementById("33").value;
-        var precio = document.getElementById("44").value;
-        var costo=document.getElementById("55").value;
-        
-        document.getElementById("1").value = nombre;
-        document.getElementById("2").value = descripcion;
-        document.getElementsByName("3").value = existenciaMin;
-        document.getElementsByTagName("4").value = precio;
-        document.getElementsByTagName("5").value = costo;
+        function capturar() {
+            console.log("naded desasddfaf")
+            var nombre = document.getElementById("11").value;
+            var descripcion = document.getElementById("22").value;
+            var existenciaMin = document.getElementById("33").value;
+            var precio = document.getElementById("44").value;
+            var costo = document.getElementById("55").value;
+
+            document.getElementById("1").value = nombre;
+            document.getElementById("2").value = descripcion;
+            document.getElementsByName("3").value = existenciaMin;
+            document.getElementsByTagName("4").value = precio;
+            document.getElementsByTagName("5").value = costo;
+
     </script>
 </html>

@@ -7,6 +7,7 @@ package hospitalPractica.Backend.Administracion;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -59,17 +60,32 @@ public class Factura {
     public void setNombreArea(String nombreArea) {
         this.nombreArea = nombreArea;
     }
+    public int obtenerIDMayorFactura(Connection conexion){
+       PreparedStatement ps1 = null;
+        ResultSet rs = null;
+        String sql = "SELECT Max(idFactura) FROM Factura;";
+        try {
+            ps1 = conexion.prepareStatement(sql);
+            rs = ps1.executeQuery();
+            rs.first();
+            System.out.println(rs.getInt("Max(idFactura)")+ "  numero");
+            return rs.getInt("Max(idFactura)");
+        } catch (SQLException e) {
+            System.out.println("error leyendo id idFactura max Factura" + e);
+            return 0;
+        }
+    }
     
-    
-    public boolean generarFactura(Connection conexion, String Fecha, float TotalVenta){
+    public boolean generarFactura(Connection conexion, String Fecha, float TotalVenta, String cuiCliente, int idArea){
         PreparedStatement ps1;
         boolean uno = false;
-        String sql = "INSERT INTO Factura (fecha, total) VALUES (?,?)";
+        String sql = "INSERT INTO Factura (fecha, monto, cuiCliente, idArea) VALUES (?,?,?,?)";
         try {
-            String consulta = "INSERT INTO Usuario (nombreUsuario, passwordUser, rango) VALUES (?,?,?);";
-            ps1 = conexion.prepareStatement(consulta);
+            ps1 = conexion.prepareStatement(sql);
             ps1.setString(1, Fecha);
-            ps1.setFloat(idFactura, TotalVenta);
+            ps1.setFloat(2, TotalVenta);
+            ps1.setString(3, cuiCliente);
+            ps1.setInt(4, idArea);
             ps1.executeUpdate();
             System.out.println("Factura guardada");
             return true;

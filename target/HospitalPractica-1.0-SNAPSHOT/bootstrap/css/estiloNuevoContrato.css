@@ -58,3 +58,16 @@
     display: inline-block;
     margin-left: 40px;
 }
+
+#nuevaHab{
+    font-size: 30px;
+}
+
+#precioHabitacion{
+    margin-left: 5%;
+    font-size: 30px;
+}
+
+#costoHabitacion{
+    margin-left: 3.5%;
+}

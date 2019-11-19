@@ -79,6 +79,9 @@ public class ActualizadorInventario extends HttpServlet {
         String medcinaNombre = request.getParameter("medincinaNombre");
         inventario.setNombre(medcinaNombre);
         inventario.editarExistencia(conexion, existenciaActualizada);
+        ArrayList<Medicina> medicinas = inventario.listarExistencias(conexion);
+        request.setAttribute("medicinasExistencia", medicinas);
+        getServletContext().getRequestDispatcher("/DocumentosWeb/Farmacia/ActualizacionExistencia.jsp").forward(request, response);
     }
 
     /**

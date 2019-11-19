@@ -66,6 +66,7 @@
                                 <input class="fechas" type="date" name="fecha" size="20" required>
                             </div>
                             <div>
+                                <input name="rango" value="Recepcionista" style="display: none;">
                                 <input type="time" name="hora" min="08:00" max="18:00" step="3600">
                             </div>
                         </div>

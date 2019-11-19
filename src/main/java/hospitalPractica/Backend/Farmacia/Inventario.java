@@ -19,6 +19,7 @@ import java.util.ArrayList;
 public class Inventario {
     private String nombre;
     private int existencia;
+    private Medicina medicina;
 
     public String getNombre() {
         return nombre;
@@ -35,6 +36,15 @@ public class Inventario {
     public void setExistencia(int existencia) {
         this.existencia = existencia;
     }
+
+    public Medicina getMedicina() {
+        return medicina;
+    }
+
+    public void setMedicina(Medicina medicina) {
+        this.medicina = medicina;
+    }
+    
     
     public boolean agregarProductoInventario(Connection conexion){
         PreparedStatement ps1;
@@ -62,6 +72,7 @@ public class Inventario {
             ps1 = conexion.prepareStatement(sql);
             ps1.setString(1, nomreProducto);
             rs = ps1.executeQuery();
+            rs.first();
             existencia = rs.getInt("existencia");
             System.out.println("existencia = " + existencia);
             return existencia;
@@ -77,6 +88,7 @@ public class Inventario {
         try {
             ps1=conexion.prepareStatement(sql);
             ps1.setInt(1, existencia );
+            ps1.setString(2, nombre);
             ps1.executeUpdate();
             System.out.println("existencia actualizada " + nombre);
             return true;
@@ -102,19 +114,38 @@ public class Inventario {
        
             while (rs.next()) {
                 System.out.println(rs.getRow());
-                Medicina medicina = new Medicina();
-                medicina.setNombre(rs.getString("nombreProducto"));
-                medicina.setPrecio(rs.getFloat("precio"));
-                medicina.setDescripcion(rs.getString("descripcion"));
-                medicina.setCosto(rs.getFloat("costo"));
-                medicina.setExistencia(rs.getInt("existencia"));
-                medicina.setExistenciaMinima(rs.getInt("existenciaMinima"));
-                System.out.println(medicina.getNombre() +" medicina agregada");
-                list.add(medicina);
+                Medicina medicina1 = new Medicina();
+                medicina1.setNombre(rs.getString("nombreProducto"));
+                medicina1.setPrecio(rs.getFloat("precio"));
+                medicina1.setDescripcion(rs.getString("descripcion"));
+                medicina1.setCosto(rs.getFloat("costo"));
+                medicina1.setExistencia(rs.getInt("existencia"));
+                medicina1.setExistenciaMinima(rs.getInt("existenciaMinima"));
+                System.out.println(medicina1.getNombre() +" medicina agregada");
+                list.add(medicina1);
             }
         } catch (SQLException e) {
             System.out.println("no se encontnombreProducto medicina " + e);
         }
         return list;
+    }
+    
+    public boolean editarMedicina(Connection conexion, Medicina miMedicina){
+        PreparedStatement ps1;
+        String sql="UPDATE Medicina SET precio = ?, costo = ?, existenciaMinima =  ? , descripcion =  ?  WHERE nombreProducto= ?;";
+        try {
+            ps1=conexion.prepareStatement(sql);
+            ps1.setFloat(1, miMedicina.getPrecio());
+            ps1.setFloat(2, miMedicina.getCosto());
+            ps1.setInt(3, miMedicina.getExistenciaMinima());
+            ps1.setString(4, miMedicina.getDescripcion());
+            ps1.setString(5, miMedicina.getNombre());
+            ps1.executeUpdate();
+            System.out.println("mrdicina Actualizada");
+            return true;
+        } catch (SQLException e) {
+            System.out.println("error al actualizar la medicina "+ e);
+            return false;
+        }  
     }
 }

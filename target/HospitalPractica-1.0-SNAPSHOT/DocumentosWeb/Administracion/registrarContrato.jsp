@@ -1,5 +1,5 @@
 <%-- 
-    Document   : registrarContrto
+    Document   : registrarContrato
     Created on : 10/11/2019, 10:19:15 AM
     Author     : astridmc
 --%>
@@ -14,13 +14,33 @@
         <title>Contrato Nuevo</title>
     </head>
     <body>
+        <%  if (session.getAttribute("Guardado") != null) {
+                String strExpired = (String) session.getAttribute("Guardado");
+                System.out.println(strExpired);
+                if (strExpired.equals("Guardado")) {
+                    session.setAttribute("Guardado", null);
+        %>
+        <script>
+
+            alert("el Empleado se Ha Registrado Con Exito");
+
+        </script>
+        <% } else if (strExpired.equals("noGuardado")) {
+            session.setAttribute("Guardado", null);%>
+        <script>
+
+            alert("el Empleado no ha podido Registrarse");
+
+        </script>
+        <% }
+            }%>
         <%@include  file= "headerAdministracion.jsp"%>
         <div style="padding-top: 320px; padding-left: 16%; align-content: center;">
             <div style="align-content: center; padding-left: 10%;">
                 <h1 id="titulo">Nuevo Contrato</h1>
             </div>
             <div id="divPrincipal">
-                <form class="form-horizontal" action="<%=request.getContextPath()%>/#" method="POST">
+                <form class="form-horizontal" action="<%=request.getContextPath()%>/Empleados" method="POST">
                     <div class="form-group" id="div0">
                         <div class="col-sm-10">
                             <label >Nombres Del Empleado</label>
@@ -37,44 +57,67 @@
                         <div class="col-sm-10">
                             <label >CUI del Empleado</label>
                             <input class="form__input" type="number"  oninput="maxLengthCheck(this)"
-                                   name="cui" id="cui" placeholder ="cui (13 digitos)"  required>
+                                   name="cuiEmpleado" id="cui" placeholder ="cui (13 digitos)"  required>
                         </div>
                     </div>
                     <div class="form-group" id="div3">
                         <div class="col-sm-10">
                             <label >Telefono del Empleado</label>
                             <input  type='number' oninput="maxLengthCheck2(this)"
-                                   name="telefono" id="telefono" placeholder ="telefono (8digitos)" required>
+                                    name="telefono" id="telefono" placeholder ="telefono (8digitos)" required>
+                        </div>
+                    </div>
+                    <div class="form-group" id="div3">
+                        <div class="col-sm-10">
+                            <label >contraseña(en caso de ser necesario)</label>
+                            <input  type='text' 
+                                    name="password" id="password" placeholder ="contraseña">
                         </div>
                     </div>
                     <div class="form-group" id="divSegundo">
-                        <select class="input" name = "rangos">
-                                <option value="66">PRUEBA</option>
-                                <option value="66">PRUEBA 22</option>
-                        </select>
-                        <%-- <select name = "rangos">
-                            <c:forEach var="element.getNombre()" items="${Rangos}">
-                                <option value="${element.getNombre()}">${element}</option>
+                        <label>Rango</label>
+                        <select name = "miRango">
+                            <c:forEach var="element" items="${rangos1}">
+                                <option name="miRango" value="${element}">${element}</option>
                             </c:forEach>
-                        </select>--%>
+                        </select> 
+
+                        <div class="col-sm-10" style="font-size:  30px;">
+                            <label class="titulos" style="display: inline"  >Fecha de Contratacion </label>
+                            <input style="display: inline; margin-left: 75px;" id="fechaContratacion" class="fechas" type="date" name="fechaContratacion" size="20" required>
+                            <br>
+                        </div>
                         <label><input class="imput" type="checkbox" id="IGSS" name="IGSS" value="IGSS"> IGSS</label>
                         <label><input class="imput" type="checkbox" id="IRTRA" name="IRTRA" value="IRTRA"> IRTRA</label>
                     </div>
+                    <input type="submit" name='boton' id="boton" class="btn btn-success" value="GuardarEmpelado">
                 </form>
             </div>
         </div>
     </body>
     <script>
-            function maxLengthCheck(object)
-            {
-                if (object.value.length > 13)
-                        object.value = object.value.slice(0, object.maxLength);
-            }
+        function maxLengthCheck(object)
+        {
+            if (object.value.length > 13)
+                object.value = object.value.slice(0, object.maxLength);
+        }
 
-            function maxLengthCheck2(object)
-            {
-                if (object.value.length > 8)
-                    object.value = object.value.slice(0, object.maxLength);
-            }
-        </script>
+        function maxLengthCheck2(object)
+        {
+            if (object.value.length > 8)
+                object.value = object.value.slice(0, object.maxLength);
+        }
+
+        window.onload = function () {
+            var fecha = new Date();
+            var mes = fecha.getMonth() + 1;
+            var dia = fecha.getDate();
+            var anio = fecha.getFullYear();
+            if (dia < 10)
+                dia = '0' + dia;
+            if (mes < 10)
+                mes = '0' + mes
+            document.getElementById('fechaContratacion').value = anio + "-" + mes + "-" + dia;
+        }
+    </script>
 </html>

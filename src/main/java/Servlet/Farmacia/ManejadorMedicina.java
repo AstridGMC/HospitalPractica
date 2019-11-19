@@ -58,10 +58,11 @@ public class ManejadorMedicina extends HttpServlet {
             throws ServletException, IOException {
         processRequest(request, response);
         System.out.println(request.getParameter("pagina"));
-        if("ActualizarMedicina".equals(request.getParameter("pagina"))){
-            ArrayList <Medicina> medicinas= inventario.listarExistencias(conexion);
+        if ("ActualizarMedicina".equals(request.getParameter("pagina"))) {
+            ArrayList<Medicina> medicinas = inventario.listarExistencias(conexion);
             request.setAttribute("medicinasActualizar", medicinas);
-            getServletContext().getRequestDispatcher("/DocumentosWeb/Administracion/ingresarNuevaConsulta.jsp").forward(request, response);
+            request.setAttribute("rango", "Farmaceuta");
+            getServletContext().getRequestDispatcher("/DocumentosWeb/Farmacia/editarMedicina.jsp").forward(request, response);
         }
     }
 
@@ -104,6 +105,23 @@ public class ManejadorMedicina extends HttpServlet {
                 }
                 break;
             case "actualizarMedicina":
+                ArrayList<Medicina> medicinas = inventario.listarExistencias(conexion);
+                request.setAttribute("medicinasActualizar", medicinas);
+                med.setNombre(request.getParameter("nombre"));
+                med.setCosto(Float.parseFloat(request.getParameter("costo")));
+                med.setPrecio(Float.parseFloat(request.getParameter("precio")));
+                med.setDescripcion(request.getParameter("descripcion"));
+                med.setExistenciaMinima(Integer.parseInt(request.getParameter("existenciaMinima")));
+                System.out.println(med.getCosto());
+                if (inventario.editarMedicina(conexion, med)) {
+                    request.getSession().setAttribute("Guardado", "Guardado");
+                    request.setAttribute("medicinas", inventario.listarExistencias(conexion));
+                    getServletContext().getRequestDispatcher("/DocumentosWeb/Farmacia/editarMedicina.jsp").forward(request, response);
+                } else {
+                    request.getSession().setAttribute("Guardado", "noGuardado");
+                    request.setAttribute("medicinas", inventario.listarExistencias(conexion));
+                    getServletContext().getRequestDispatcher("/DocumentosWeb/Farmacia/editarMedicina.jsp").forward(request, response);
+                }
                 break;
         }
     }

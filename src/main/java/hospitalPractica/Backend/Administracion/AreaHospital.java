@@ -17,6 +17,33 @@ import java.sql.SQLException;
 public class AreaHospital {
     private int idAreaHospital;
     private String nombreArea;
+    private float salarioArea;
+
+    public int getIdAreaHospital() {
+        return idAreaHospital;
+    }
+
+    public void setIdAreaHospital(int idAreaHospital) {
+        this.idAreaHospital = idAreaHospital;
+    }
+
+    public String getNombreArea() {
+        return nombreArea;
+    }
+
+    public void setNombreArea(String nombreArea) {
+        this.nombreArea = nombreArea;
+    }
+
+    public float getSalarioArea() {
+        return salarioArea;
+    }
+
+    public void setSalarioArea(float salarioArea) {
+        this.salarioArea = salarioArea;
+    }
+    
+    
     
     public boolean nuevaAreaHospital(Connection conexion){
         PreparedStatement ps1 = null;
@@ -46,8 +73,43 @@ public class AreaHospital {
             nombreArea = rs.getString("noimbreArea");
             return nombreArea;
         } catch (SQLException e) {
-            System.out.println("error leyendo revista" + e);
+            System.out.println("error leyendo Nombre Area" + e);
             return null;
         }
     }
+    
+    public int obtenerIDArea(Connection conexion, String nombreRango){
+        PreparedStatement ps1 = null;
+        ResultSet rs = null;
+        String sql = "SELECT idAreaHospital FROM Rango WHERE rango = ? ;";
+        try {
+            ps1 = conexion.prepareStatement(sql);
+            ps1.setString(1, nombreRango);
+            rs = ps1.executeQuery();
+            rs.first();
+            int area = rs.getInt("idAreaHospital");
+            return area;
+        } catch (SQLException e) {
+            System.out.println("error leyendo id Hospital " + e);
+            return 0;
+        }
+    }
+    
+    public int obtenerIDMayorArea(Connection conexion){
+       PreparedStatement ps1 = null;
+        ResultSet rs = null;
+        String sql = "SELECT Max(idAreaHospital) FROM AreasHospital;";
+        try {
+            ps1 = conexion.prepareStatement(sql);
+            rs = ps1.executeQuery();
+            rs.first();
+            System.out.println(rs.getInt("Max(idAreaHospital)")+ "  numero");
+            return rs.getInt("Max(idAreaHospital)");
+        } catch (SQLException e) {
+            System.out.println("error leyendo id Area max Hospital" + e);
+            return 0;
+        }
+    }
+    
+   
 }

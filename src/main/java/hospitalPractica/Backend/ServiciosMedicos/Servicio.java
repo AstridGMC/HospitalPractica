@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class Servicio {
     private String nombreServicio;
-    private int precioServicio;
+    private float precioServicio;
     private String areaHospital;
 
     public String getNombreServicio() {
@@ -20,11 +20,11 @@ public class Servicio {
         this.nombreServicio = nombreServicio;
     }
 
-    public int getPrecioServicio() {
+    public float getPrecioServicio() {
         return precioServicio;
     }
 
-    public void setPrecioServicio(int precioServicio) {
+    public void setPrecioServicio(float precioServicio) {
         this.precioServicio = precioServicio;
     }
 
@@ -44,7 +44,7 @@ public class Servicio {
             ps1= conexion.prepareStatement(consulta);
             ps1.setInt(1, idAreaHospital);
             ps1.setString(2, nombreServicio);
-            ps1.setInt(3, precioServicio);
+            ps1.setFloat(3, precioServicio);
             ps1.executeUpdate();
             System.out.println("nuevo Servicio Guardado ");
             return true;
@@ -74,7 +74,7 @@ public class Servicio {
         PreparedStatement ps1 = null;
         AreaHospital area = new AreaHospital();
         ResultSet rs = null;
-        String sql = "SELECT * FROM Servicio WHERE nombreServicio= ?;";
+        String sql = "SELECT * FROM ServiciosHospital WHERE nombreServicio= ?;";
         Servicio servicio= new Servicio();
         try {
             ps1 = conexion.prepareStatement(sql);
@@ -113,6 +113,9 @@ public class Servicio {
         }
         return list;
     }
+    
+    
+    
     
      public  ArrayList<String> listarNombreServicios(Connection conexion){
         PreparedStatement ps1;

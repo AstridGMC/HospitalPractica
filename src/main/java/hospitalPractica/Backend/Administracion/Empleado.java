@@ -8,22 +8,25 @@ package hospitalPractica.Backend.Administracion;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 /**
  *
  * @author astridmc
  */
 public class Empleado {
-    
+
     private String nombre;
     private String apellido;
     private String rango;
     private String celular;
     private String cui;
-    private Date fechaVacacionesInicio;
-    private Date fechaVacacionesFinal;
-    private int salario;
+    private Contrato contrato;
+    private Vacacion vacaciones;
+    private float salario;
 
     public String getNombre() {
         return nombre;
@@ -49,11 +52,11 @@ public class Empleado {
         this.cui = cui;
     }
 
-    public int getSalario() {
+    public float getSalario() {
         return salario;
     }
 
-    public void setSalario(int salario) {
+    public void setSalario(float salario) {
         this.salario = salario;
     }
 
@@ -73,70 +76,111 @@ public class Empleado {
         this.celular = celular;
     }
 
-    public Date getFechaVacacionesInicio() {
-        return fechaVacacionesInicio;
+    public Contrato getContrato() {
+        return contrato;
     }
 
-    public void setFechaVacacionesInicio(Date fechaVacacionesInicio) {
-        this.fechaVacacionesInicio = fechaVacacionesInicio;
+    public void setContrato(Contrato contrato) {
+        this.contrato = contrato;
     }
 
-    public Date getFechaVacacionesFinal() {
-        return fechaVacacionesFinal;
+    public Vacacion getVacaciones() {
+        return vacaciones;
     }
 
-    public void setFechaVacacionesFinal(Date fechaVacacionesFinal) {
-        this.fechaVacacionesFinal = fechaVacacionesFinal;
+    public void setVacaciones(Vacacion vacaciones) {
+        this.vacaciones = vacaciones;
     }
-    
-    
-    
-    public boolean nuevoEmpleado(Connection conexion){
+
+    public Empleado obtenerInfoEmpleadoVacaciones(Connection conexion, String cui, int año) {
+        
+        PreparedStatement validarNombre = null;
+        Empleado empleado = new Empleado();
+        try {
+            Vacacion vaca = new Vacacion();
+            System.out.println(año + cui);
+            String consulta1 = "SELECT nombres, apellidos, reclamadas, DATE_FORMAT(fechaInicioVacaciones, '%d/%m/%Y') "
+                    + ", DATE_FORMAT(fechaFinalVacaciones, '%d/%m/%Y'), DATE_FORMAT(fechaAsignacion, '%d/%m/%Y')"
+                    + " FROM Empleado JOIN Vacaciones ON Empleado.cuiEmpleado = Vacaciones.cuiEmpleado WHERE Empleado.cuiEmpleado = ? AND YEAR(fechaInicioVacaciones) = "+Integer.toString(año)+";";
+            validarNombre = conexion.prepareStatement(consulta1);
+            validarNombre.setString(1, cui);
+            ResultSet rs = validarNombre.executeQuery();
+            System.out.println(rs.first());
+            empleado.setNombre(rs.getString("nombres"));
+            empleado.setApellido(rs.getString("apellidos"));
+            empleado.setCui(cui);
+             vaca.setFechaVacacionesInicio(rs.getString("DATE_FORMAT(fechaInicioVacaciones, '%d/%m/%Y')"));
+            vaca.setFechaVacacionesFinal(rs.getString("DATE_FORMAT(fechaFinalVacaciones, '%d/%m/%Y')"));
+            vaca.setFechaAsignacion(rs.getString("DATE_FORMAT(fechaAsignacion, '%d/%m/%Y')"));
+            vaca.setTomadas(rs.getBoolean("reclamadas"));
+            System.out.println(vaca.getFechaAsignacion());
+            empleado.setVacaciones(vaca);
+            return empleado;
+        } catch (SQLException e) {
+            System.out.println("info empleado no encontrada " + e);
+            return null;
+        }
+    }
+
+    public boolean nuevoEmpleado(Connection conexion, String fecha) {
+        boolean si=false;
         PreparedStatement ps1 = null;
         try {
-            String consulta ="INSERT INTO Empleado (cuiEmpleado, nombres, apellidos, salario)"
-                + " VALUES (?,?,?,?);";
-            ps1= conexion.prepareStatement(consulta);
+            Vacacion misVaca= new Vacacion();
+            String consulta = "INSERT INTO Empleado (cuiEmpleado, nombres, apellidos, salario, telefono)"
+                    + " VALUES (?,?,?,?,?);";
+            ps1 = conexion.prepareStatement(consulta);
             ps1.setString(1, cui);
             ps1.setString(2, nombre);
             ps1.setString(3, apellido);
-            ps1.setInt(4, salario);
+            ps1.setFloat(4, salario);
+            ps1.setString(5, celular);
             ps1.executeUpdate();
-            System.out.println("guardado");
-            return true;
-        } catch (SQLException e){
+            System.out.println(cui);
+            System.out.println(fecha + "fecha no vacia");
+            if (misVaca.asignarVacacionesAuto(conexion, cui, fecha)) {
+                System.out.println("guardado");
+                si= true;
+            }else{
+                System.out.println("no vacaciones Guardadas");
+                si= false;
+            }
+
+        } catch (SQLException e) {
             System.out.println("error guardando Empleado" + e);
-            return false;
+            si= false;
         }
+        return si;
     }
-    
-    public boolean aumentarSalario(Connection conexion, int salario){
+
+    public boolean aumentarSalario(Connection conexion, float salario) {
         PreparedStatement ps1 = null;
-        String sql="UPDATE Empleado SET salario = ? WHERE cuiEmpleado= ?;";
+        String sql = "UPDATE Empleado SET salario = ? WHERE cuiEmpleado= ?;";
         try {
-            ps1=conexion.prepareStatement(sql);
+            ps1 = conexion.prepareStatement(sql);
             ps1.setDouble(1, salario);
             ps1.setString(2, cui);
             ps1.executeUpdate();
             System.out.println("salario Guardado");
             return true;
-        } catch (SQLException e){
-            System.out.println("error No se ha modificado el salario "+ e);
+        } catch (SQLException e) {
+            System.out.println("error No se ha modificado el salario " + e);
             return false;
         }
     }
 
-    public boolean modificarVacaciones(Connection conexion, String fechaInicio, String fechaFinal){
+    public boolean modificarVacaciones(Connection conexion, String fechaInicio, String fechaFinal, String fechaModificacion) {
         PreparedStatement ps1 = null;
-        String sql="UPDATE Vacaciones SET fechaInicioVacaciones = '"+fechaInicio+"', fechaFinalVacaciones = '"+fechaFinal+"' WHERE cuiEmpleado= ?;";
+        String sql = "UPDATE Vacaciones SET fechaInicioVacaciones ='"+ fechaInicio + "', fechaFinalVacaciones = '"+fechaFinal+"' , fechaAsignacion = '" + fechaModificacion + "' WHERE cuiEmpleado= ?;";
         try {
-            ps1=conexion.prepareStatement(sql);
+            System.out.println(cui);
+            ps1 = conexion.prepareStatement(sql);
             ps1.setString(1, cui);
             ps1.executeUpdate();
             System.out.println("Vacaciones Guardadas");
             return true;
         } catch (SQLException e) {
-            System.out.println("error No se ha modificado las vacaciones "+ e);
+            System.out.println("error No se ha modificado las vacaciones " + e);
             return false;
         }
     }

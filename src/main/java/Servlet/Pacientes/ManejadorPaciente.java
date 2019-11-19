@@ -59,7 +59,7 @@ public class ManejadorPaciente extends HttpServlet {
         processRequest(request, response);
         
         ArrayList<Servicio> servicios = miServicio.listarServicios(conexion);
-        request.setAttribute("categorias", servicios);
+        request.setAttribute("Servicios", servicios);
         getServletContext().getRequestDispatcher("/DocumentosWeb/Recepcion/ingresarNuevaConsulta.jsp").forward(request, response);
     }
 
@@ -103,7 +103,14 @@ public class ManejadorPaciente extends HttpServlet {
                     request.setAttribute("encontrado", false);
                     getServletContext().getRequestDispatcher("/DocumentosWeb/Recepcion/ingresarNuevaConsulta.jsp").forward(request, response);
                 }
-
+                break;
+            case "Buscar Servicios Recibidos":
+                String cuiPacient= request.getParameter("cuiPaciente");
+                
+                break;
+            case "Pagar Servicios Recibidos":
+                
+                break;
         }
 
     }

@@ -33,7 +33,9 @@
 }
 
 #botonAgregar{
-    width: 100px;
+    background-color: green;
+    color: white;
+    width: 150px;
     margin-top: 50px;
     margin-left: auto;
     margin-right: 60%;
