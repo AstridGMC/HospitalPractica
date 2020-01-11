@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -18,6 +19,15 @@ public class AreaHospital {
     private int idAreaHospital;
     private String nombreArea;
     private float salarioArea;
+    private ArrayList<String> rangos;
+
+    public ArrayList<String>  getRangos() {
+        return rangos;
+    }
+
+    public void setRangos(ArrayList<String>  rangos) {
+        this.rangos = rangos;
+    }
 
     public int getIdAreaHospital() {
         return idAreaHospital;
@@ -111,5 +121,27 @@ public class AreaHospital {
         }
     }
     
+    public ArrayList<AreaHospital> listarAreas(Connection conexion){
+        Rango rangosArea = new Rango();
+        AreaHospital area = new AreaHospital();
+        ArrayList<AreaHospital> areas = new ArrayList();
+         PreparedStatement ps1;
+        ResultSet rs;
+        String sql = "SELECT * FROM AreasHospital";
+        try {
+            ps1 = conexion.prepareStatement(sql);
+            rs = ps1.executeQuery();
+            while (rs.next()) {
+               area.setNombreArea(rs.getString("nombreArea"));
+               area.setIdAreaHospital(rs.getInt("idAreaHospital"));
+               area.setRangos(rangosArea.listarRangosPorArea(conexion, area.getIdAreaHospital()));
+               areas.add(area);
+               
+            } 
+        } catch (SQLException e) {
+            System.out.println("no se pudo listar areas y rangos");
+        }
+        return areas;
+    }
    
 }

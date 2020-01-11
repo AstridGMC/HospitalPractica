@@ -108,4 +108,26 @@ public class Rango {
             return 0;
         }
     }
+     
+     public ArrayList<String> listarRangosPorArea(Connection conexion,int  idAreaHospital) {
+        System.out.println("listando Existencias");
+        PreparedStatement ps1;
+        ResultSet rs;
+        ArrayList<String> list = new ArrayList<>();
+        String sql = "SELECT * FROM Dispone WHERE idAreaHospital = ?";
+        try {
+            ps1 = conexion.prepareStatement(sql);
+            ps1.setInt(1, idAreaHospital);
+            rs = ps1.executeQuery();
+            while (rs.next()) {
+                if (!"Administrador".equals(rs.getString("Rango"))) {
+                    System.out.println(rs.getRow());
+                    list.add(rs.getString("Rango"));
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("no se encontro rangos " + e);
+        }
+        return list;
+    }
 }

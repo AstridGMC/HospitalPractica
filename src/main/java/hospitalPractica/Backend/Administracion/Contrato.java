@@ -128,13 +128,34 @@ public class Contrato {
             contrato.setIGSS(rs.getBoolean("IGSS"));
             contrato.setIRTRA(rs.getBoolean("IRTRA"));
             contrato.setFechaInicio(rs.getDate("fechaInicio"));
-            contrato.setFechaFinal(rs.getDate("fechaInicio"));
+            contrato.setFechaFinal(rs.getDate("fechaFinal"));
             empleado.setContrato(contrato);
-            return empleado;
+            if(contrato.getFechaFinal()==null){
+                return empleado;
+            }else {
+                return null;
+            }
+            
         } catch (SQLException e) {
             System.out.println("error leyendo Contrato del empleado "+cuiEmpleado +"  "+ e);
             return null;
         }
     }
 
+    public boolean finalizarContrato(Connection conexion, String fechaFinal, String cui ){
+       PreparedStatement ps1;
+        String sql = "UPDATE Contratar SET fechaFinal = '"+fechaFinal+"' WHERE cuiEmpleado= ?;";
+        try {
+            System.out.println(conexion.isClosed());
+            System.out.println(fechaFinal+"   "+cui);
+            ps1 = conexion.prepareStatement(sql);
+            ps1.setString(1, cui);
+            System.out.println(ps1.executeUpdate());
+            System.out.println("Contrato Terminado");
+            return true;
+        } catch (SQLException e) {
+            System.out.println("error No se ha modificado el contrato " + e);
+            return false;
+        }
+    }
 }

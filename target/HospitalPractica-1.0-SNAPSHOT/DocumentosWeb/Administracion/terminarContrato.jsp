@@ -12,7 +12,7 @@
         <link href= "<%=request.getContextPath()%>/bootstrap/css/estiloCambiarVacacionesEmpleado.css" rel="stylesheet" type ="text/css">
         <link href = "<%=request.getContextPath()%>/bootstrap/css/bootstrap.min.css" rel="stylesheet" type ="text/css">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Vaja Empleado</title>
+        <title>Fin Contrato</title>
     </head>
     <body>
         <%  if (session.getAttribute("Guardado") != null) {
@@ -23,7 +23,7 @@
         %>
         <script>
 
-            alert("el Contrato del Empleado ha sido Finalizado");
+            alert("El contrato del Empleado ha sido Finalizado");
 
         </script>
         <% } else if (strExpired.equals("noGuardado")) {
@@ -74,25 +74,28 @@
                     </div>
                     <%} else if ((boolean) request.getAttribute("encontrado") == false) {%>
                     <div id="noEncontrado">
-                        <h3>El Empleado  con cui = <%=request.getAttribute("cuiEempleado")%> no se encuentra en la base de datos</h3>
+                        <h3>El Empleado  con cui = <%=request.getAttribute("cuiEmpleado")%> no se encuentra en la base de datos <br> o su contrato ha sido terminado</h3>
                         <%}
+                           
                             }%>
                     </div>
                 </div>
             </div>
-            <div>
-                <form action='<%=request.getContextPath()%>/Empleado' method='POST'>
+            <div id="finalizacion">
+                <form action='<%=request.getContextPath()%>/Empleados' method='POST'>
                     <h2 id="subtitulo">Fecha de Finalizacion del Contrato</h2>
                     <br>
                     <div class="form-group" id="div4">
                         <div class="form-group" id="div0">
                             <div class="col-sm-10" style="font-size:  30px;">
                                 <label class="titulos" style="display: inline; padding-left: 10%;"  >ingrese la Fecha de FInalizacion del contrato </label>
+                                <input style=" display: none" type="text" name="cuiEmpleado" size="20" value="<%=request.getAttribute("cuiEempleado")%> ">
                                 <input style="display: inline; margin-left: 75px;" id="fechaFinalizacion" class="fechas" type="date" name="fechaFinalizacion" size="20" required>
                                 <br>
                             </div>
                             <br>
-                            <input style="display: none;" type="submit" name='boton' id="boton" class="btn btn-success" value="Finalizar Contrato">
+                            <input  type="submit" name='boton' id="boton" class="btn btn-success" value="Finalizar Contrato">
+                           
                         </div>
                     </div>
                 </form>

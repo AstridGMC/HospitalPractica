@@ -18,6 +18,7 @@ hospitalPractica/Backend/Administracion/Vacacion.class
 Servlet/ManejadorAtencion.class
 hospitalPractica/Backend/Administracion/Contrato.class
 hospitalPractica/Backend/Usuario.class
+Servlet/Administracion/manejadorReportesAdmin.class
 Servlet/Administracion/ManejadorVacaciones.class
 hospitalPractica/Backend/Farmacia/Inventario.class
 Servlet/Farmacia/ManejadorMedicina.class

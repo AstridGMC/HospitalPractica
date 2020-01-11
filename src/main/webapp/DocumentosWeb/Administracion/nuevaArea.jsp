@@ -9,6 +9,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link href = "<%=request.getContextPath()%>/bootstrap/css/bootstrap.min.css" rel="stylesheet" type ="text/css">
         <title>Registro nueva Area</title>
     </head>
     <body>
@@ -29,9 +30,10 @@
         <% }
             }%>
         <%@include  file= "headerAdministracion.jsp"%>
-        <div style="padding-top: 320px; padding-left: 16%; align-content: center;font-size: 25px;">
-            <h1>Area del Hospital Nueva</h1>
+        <div style="padding-top: 320px;  font-size: 25px;">
+            <h1 style="padding-left: 20%">Area del Hospital Nueva</h1>
             <form action='<%=request.getContextPath()%>/Administracion' method="POST">
+                 <div style="  margin-left: 25%; margin-right: auto; font-size: 25px;">
                 <div style="padding-top: 50px;">
                     <div class="col-sm-10">
                         <label style="font-size: 30px;"  >Nombre de la Nueva Area del Hospital:</label>
@@ -46,7 +48,8 @@
                         </c:forEach>
                     
                 </div>
-                <input type="submit" name="boton" id="btnGuardar" value="Guardar Area">
+                <input type="submit" name="boton" id="btnGuardar" class="btn btn-success" value="Guardar Area">
+                 </div>
             </form>
         </div>
         

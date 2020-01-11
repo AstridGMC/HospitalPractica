@@ -16,12 +16,12 @@ import hospitalPractica.Backend.Paciente;
 import hospitalPractica.Backend.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
+import static java.lang.System.out;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -151,25 +151,40 @@ public class ManejadorEmpleados extends HttpServlet {
                     request.setAttribute("cuiEmpleado", cui);
                     request.setAttribute("encontrado", true);
                     request.setAttribute("empleado", miEmpleado);
+                    request.setAttribute("cuiEmpleado", cui);
                     getServletContext().getRequestDispatcher("/DocumentosWeb/Administracion/terminarContrato.jsp").forward(request, response);
                 }else{
                     request.setAttribute("cuiEmpleado", cui);
                     request.setAttribute("encontrado", false);
                      request.setAttribute("empleado", miEmpleado);
+                     request.setAttribute("cuiEmpleado", cui);
                     getServletContext().getRequestDispatcher("/DocumentosWeb/Administracion/terminarContrato.jsp").forward(request, response);
                 }
                 
                 break;
             case "Finalizar Contrato":
                 String fechaFinalizacion = request.getParameter("fechaFinalizacion");
-                cui = request.getParameter("cuiEmpleado");
-                getServletContext().getRequestDispatcher("DocumentosWeb/Administracion/terminarContrato.jsp").forward(request, response);
+                boolean hecho = contrato.finalizarContrato(conexion, fechaFinalizacion, cui);
+                if(hecho==true){
+                    request.getSession().setAttribute("Guardado", "Guardado");
+                    getServletContext().getRequestDispatcher("/DocumentosWeb/Administracion/terminarContrato.jsp").forward(request, response);
+                }else{
+                    if(hecho!= true){
+                        request.getSession().setAttribute("Guardado", "noGuardado");
+                        getServletContext().getRequestDispatcher("/DocumentosWeb/Administracion/terminarContrato.jsp").forward(request, response);
+                    }
+                }
+                
                 break;
             case "Aumentar Salario":
                 Float salario = Float.parseFloat(request.getParameter("salario"));
                 if(empleado.aumentarSalario(conexion, salario)){
                     request.getSession().setAttribute("Guardado", true);
-                    getServletContext().getRequestDispatcher("DocumentosWeb/Administracion/aumentosEmpleado.jsp").forward(request, response);
+                    out.println("<script >");
+                    out.println("alert('Medicina Guardada Exitosamente');");
+                    out.println("location='DocumentosWeb/Farmacia/medicinaNueva.jsp';");
+                    out.println("</script>");
+                     response.sendRedirect("DocumentosWeb/Administracion/aumentosEmpleado.jsp");
                 }else{
                     request.getSession().setAttribute("Guardado", false);
                     getServletContext().getRequestDispatcher("DocumentosWeb/Administracion/aumentosEmpleado.jsp").forward(request, response);

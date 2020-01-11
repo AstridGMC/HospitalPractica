@@ -1,4 +1,4 @@
-<%-- 
+    <%-- 
     Document   : cambiarDiasVacacionesEmpleado
     Created on : 10/11/2019, 04:04:10 PM
     Author     : astridmc
@@ -109,7 +109,7 @@
                                 <br>
                                 <br>
                                 <label style="color:red; display: none;" id="ad">No se puede asignar fecha con menos de 10 dias de anticipacion</label>
-                                <input style="display: none;" type="submit" name='boton' id="boton" class="btn btn-success" value="Guardar Vacaciones Empelado">
+                                <input  type="submit" name='boton' id="boton" class="btn btn-success" value="Guardar Vacaciones Empelado">
                             </div>
                         </div>
                     </form>

@@ -83,10 +83,10 @@
                         <form action='<%=request.getContextPath()%>/Vacaciones'  method="POST">
                     <div class="form-group" id="div3">
                         <div class="col-sm-10">
-                            <label >NUeevo Salario del Empleado:</label>
+                            <label >Nuevo Salario del Empleado:</label>
                             <input  type='number' name="aumento" id="aumento" placeholder ="aumento" required>
                         </div>
-                         <input type="submit" name="boton" id="nuevaHabitacion" value="Guardar Habitacion">
+                         <input type="submit" name="boton" id="nuevaHabitacion" value="Guardar Aumento">
                     </div>
                 </form>
                     </div>

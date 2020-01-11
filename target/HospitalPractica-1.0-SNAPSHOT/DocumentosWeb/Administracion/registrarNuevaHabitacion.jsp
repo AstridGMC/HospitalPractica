@@ -35,7 +35,7 @@
             <h1 style="padding-left: 20%; font-size: 60px;">Registro Nueva Habitacion</h1>
             <div>
                 <h2>Habitacion numero  <%=request.getAttribute("numeroHabitacion")%></h2>
-                <form action='<%=request.getContextPath()%>/Vacaciones'  method="POST">
+                <form action='<%=request.getContextPath()%>/Administracion'  method="POST">
                     <div id="nuevaHab">
                         <div class="col-sm-10">
                             <label >Precio de la Habitacion:</label>

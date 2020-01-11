@@ -61,6 +61,7 @@ public class ManejadorPaciente extends HttpServlet {
         ArrayList<Servicio> servicios = miServicio.listarServicios(conexion);
         request.setAttribute("Servicios", servicios);
         getServletContext().getRequestDispatcher("/DocumentosWeb/Recepcion/ingresarNuevaConsulta.jsp").forward(request, response);
+    
     }
 
     /**
@@ -92,6 +93,8 @@ public class ManejadorPaciente extends HttpServlet {
                 }
                 break;
             case "buscarCliente":
+                ArrayList<Servicio> servicios = miServicio.listarServicios(conexion);
+                request.setAttribute("Servicios", servicios);
                 String cui = request.getParameter("cuiPaciente");
                 Paciente miPaciente = paciente.obtenerInfoPaciente(conexion, cui);
                 if (miPaciente != null) {

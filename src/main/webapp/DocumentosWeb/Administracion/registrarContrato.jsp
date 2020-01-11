@@ -70,7 +70,7 @@
                     <div class="form-group" id="div3">
                         <div class="col-sm-10">
                             <label >contraseña(en caso de ser necesario)</label>
-                            <input  type='text' 
+                            <input  type='password' 
                                     name="password" id="password" placeholder ="contraseña">
                         </div>
                     </div>
@@ -81,6 +81,13 @@
                                 <option name="miRango" value="${element}">${element}</option>
                             </c:forEach>
                         </select> 
+                        <div class="form-group" id="div3">
+                            <div class="col-sm-10">
+                                <label >Salario</label>
+                                <input  type='number' 
+                                        name="salario" id="salario" required>
+                            </div>
+                        </div>
 
                         <div class="col-sm-10" style="font-size:  30px;">
                             <label class="titulos" style="display: inline"  >Fecha de Contratacion </label>

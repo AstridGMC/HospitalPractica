@@ -101,14 +101,14 @@ public class ManejadorAdministracion extends HttpServlet {
         switch (boton) {
             case "Guardar Habitacion":
                 request.setAttribute("numeroHabitacion", habitacion.obtenerId(conexion) + 1);
-                habitacion.setCostoMantenimiento(Float.parseFloat(request.getParameter("costo")));
-                habitacion.setPrecio(Float.parseFloat(request.getParameter("precio")));
+                habitacion.setCostoMantenimiento(Float.parseFloat(request.getParameter("costoHabitacion")));
+                habitacion.setPrecio(Float.parseFloat(request.getParameter("precioHabitacion")));
                 if (habitacion.registrarNueva(conexion)) {
                     request.setAttribute("Guardado", "Guardado");
-                    getServletContext().getRequestDispatcher("/DocumentosWeb/Administracion/registrarCuartoNuevo.jsp").forward(request, response);
+                    getServletContext().getRequestDispatcher("/DocumentosWeb/Administracion/registrarNuevaHabitacion.jsp").forward(request, response);
                 } else {
                     request.setAttribute("Guardado", "noGuardado");
-                    getServletContext().getRequestDispatcher("/DocumentosWeb/Administracion/registrarCuartoNuevo.jsp").forward(request, response);
+                    getServletContext().getRequestDispatcher("/DocumentosWeb/Administracion/registrarNuevaHabitacion.jsp").forward(request, response);
                 }
                 break;
             case "Guardar Area":
