@@ -20,7 +20,7 @@
             <div class="card" style="width: 90%;">
                 <img  src="<%=request.getContextPath()%>/DocumentosWeb/imagenes/portadaFarmacia3.jpg" class="card-img-top" alt="..." style="width: 100%;">
                 <div class="card-body">
-                    <h5 class="card-title">BIENVENIDO Farmaceuta!!</h5>
+                    <h5 class="card-title">BIENVENIDO Administrador!!</h5>
                     <p class="card-text"></p>
                     <br>
                     <br>

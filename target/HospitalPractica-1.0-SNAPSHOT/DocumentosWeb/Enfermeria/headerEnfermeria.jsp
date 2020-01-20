@@ -28,7 +28,7 @@
         <nav>
             <div class="navbar1">
                 <a href="#home">Inicio</a>
-                <a href="#news">Cambiar Imagen</a>
+                <a href="<%=request.getContextPath()%>/Empleados?pm=ModificarMiUsuario">Modificar Usuario</a>
                 <div class="dropdown3">
                     <button class="dropbtn3">Pacientes
                         <i class="fa fa-caret-down"></i>

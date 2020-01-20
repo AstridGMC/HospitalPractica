@@ -71,7 +71,7 @@ public class Medicina {
         this.descripcion = descripcion;
     }
 
-    public boolean nuevaMedicina(Connection conexion) {
+    public boolean nuevaMedicina(Connection conexion, String fecha) {
         Inventario inventario = new Inventario();
         PreparedStatement ps1 = null;
         try {
@@ -87,9 +87,14 @@ public class Medicina {
                 inventario.setExistencia(existencia);
                 inventario.setNombre(nombre);
                 inventario.agregarProductoInventario(conexion);
+                if(RegistrarIngresoMedicina(conexion, fecha)){
                 System.out.println("Medicina Guardada ");
+                
                 return true;
-            }else{
+                }else{
+                    return false;
+                }
+            } else {
                 return false;
             }
         } catch (SQLException e) {
@@ -155,4 +160,54 @@ public class Medicina {
             System.out.println("existenciaMinima no encontrada " + e);
         }
     }
+    
+
+    public boolean EliminarMedicina(Connection conexion) {
+        PreparedStatement eliminarMedicina = null;
+        PreparedStatement eliminarInventario = null;
+        Inventario inventario = new Inventario();
+        String consulta = "DELETE FROM  Medicina WHERE nombreProducto = ? ;";
+        String consulta2 = "DELETE FROM InventarioFarmacia WHERE nombreProducto =?;";
+        try {
+            if (inventario.obtenerExistencia(conexion, nombre) <= 0) {
+            eliminarInventario = conexion.prepareStatement(consulta2);
+            eliminarInventario.setString(1, nombre);
+            eliminarMedicina = conexion.prepareStatement(consulta);
+            eliminarMedicina.setString(1, nombre);
+                if (eliminarInventario.executeUpdate() == 1) {
+                    eliminarMedicina.executeUpdate();
+                    return true;
+                }else{
+                    return false;
+                }
+            }else{
+                return false;
+            }
+        } catch (SQLException e) {
+            System.out.println("error eliminando medicina de la base de datos " + e);
+            return false;
+        }
+        
+        
+    }
+    public boolean RegistrarIngresoMedicina(Connection conexion, String Fecha){
+            PreparedStatement ps1 = null;
+        try {
+            String consulta = "INSERT INTO IngresoMedicina (medicina, cantidad, fechaIngreso)"
+                    + " VALUES (?,?,?);";
+            ps1 = conexion.prepareStatement(consulta);
+            ps1.setString(1, nombre);
+            ps1.setInt(2, existencia);
+            ps1.setString(3, Fecha);
+            
+            if (ps1.executeUpdate() == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (SQLException e) {
+            System.out.println("error guardando Medicina" + e);
+            return false;
+        }
+        }
 }

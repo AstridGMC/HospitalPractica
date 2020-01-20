@@ -68,7 +68,8 @@ public class Vacacion {
     
     public int año() {
         int año =  fecha.get(Calendar.YEAR);
-        return año;
+        int anio = año-1899;
+        return anio;
     }
 
     public java.util.Date sumarRestarDiasFecha(Date fecha, int dias) {
@@ -81,7 +82,8 @@ public class Vacacion {
 
     public boolean asignarVacacionesAuto(Connection conexion, String cui, String fechaActual1) {
         PreparedStatement ps1 = null;
-        Date fechaInicio = new Date(2020,elegirMes(),elegirDia() );
+        System.out.println(año() +"  "+ fecha.get(Calendar.YEAR));
+        Date fechaInicio = new Date( año() , elegirMes(), elegirDia() );
         System.out.println(fechaInicio+ "la fecha de inicio vacaciones auto");
         Date fechaFin = new Date(sumarRestarDiasFecha(fechaInicio, 10).getTime());
         System.out.println(fechaFin);

@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "Pacientes", urlPatterns = {"/ManejadorPaciente"})
 public class ManejadorPaciente extends HttpServlet {
-    
+
     Servicio miServicio = new Servicio();
     Paciente paciente = new Paciente();
     Connection conexion = InicioSesion.conexion;
@@ -57,11 +57,25 @@ public class ManejadorPaciente extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-        
-        ArrayList<Servicio> servicios = miServicio.listarServicios(conexion);
-        request.setAttribute("Servicios", servicios);
-        getServletContext().getRequestDispatcher("/DocumentosWeb/Recepcion/ingresarNuevaConsulta.jsp").forward(request, response);
-    
+        String param = request.getParameter("pm");
+        switch (param) {
+            case "NuevaConsulta":
+                ArrayList<Servicio> servicios = miServicio.listarServicios(conexion);
+                request.setAttribute("Servicios", servicios);
+                getServletContext().getRequestDispatcher("/DocumentosWeb/Recepcion/ingresarNuevaConsulta.jsp").forward(request, response);
+
+                break;
+            case "ModificarPacientesR":
+                ArrayList<Paciente> pacientes = paciente.listarPacientes(conexion);
+                request.setAttribute("pacientes", pacientes);
+                getServletContext().getRequestDispatcher("/DocumentosWeb/Recepcion/actualizarClientes.jsp").forward(request, response);
+                break;
+            case "ModificarPacientesF":
+                ArrayList<Paciente> pacientes1 = paciente.listarPacientes(conexion);
+                request.setAttribute("pacientes", pacientes1);
+                getServletContext().getRequestDispatcher("/DocumentosWeb/Farmacia/actualizarClientes.jsp").forward(request, response);
+                break;
+        }
     }
 
     /**
@@ -108,11 +122,60 @@ public class ManejadorPaciente extends HttpServlet {
                 }
                 break;
             case "Buscar Servicios Recibidos":
-                String cuiPacient= request.getParameter("cuiPaciente");
-                
+                String cuiPacient = request.getParameter("cuiPaciente");
+
                 break;
             case "Pagar Servicios Recibidos":
-                
+
+                break;
+            case "Actualizar Paciente":
+                paciente.setNombres(request.getParameter("nombres"));
+                paciente.setApellidos(request.getParameter("apellidos"));
+                paciente.setCui(request.getParameter("cui"));
+                System.out.println(paciente.getCui() + " cui a modificar");
+                paciente.setCorreoElectronico(request.getParameter("correo"));
+                paciente.setTelefono(request.getParameter("telefono"));
+                if (paciente.modificarPaciente(conexion)) {
+                    request.getSession().setAttribute("Guardado", "Guardado");
+                    ArrayList<Paciente> pacientes1 = paciente.listarPacientes(conexion);
+                    request.setAttribute("pacientes", pacientes1);
+                    if (request.getParameter("pm1").equals("R")) {
+                        getServletContext().getRequestDispatcher("/DocumentosWeb/Recepcion/actualizarClientes.jsp").forward(request, response);
+                    } else {
+                        getServletContext().getRequestDispatcher("/DocumentosWeb/Farmacia/actualizarClientes.jsp").forward(request, response);
+                    }
+                } else {
+                    request.getSession().setAttribute("Guardado", "noGuardado");
+                    ArrayList<Paciente> pacientes1 = paciente.listarPacientes(conexion);
+                    request.setAttribute("pacientes", pacientes1);
+                    if (request.getParameter("pm1").equals("R")) {
+                        getServletContext().getRequestDispatcher("/DocumentosWeb/Recepcion/actualizarClientes.jsp").forward(request, response);
+                    } else {
+                        getServletContext().getRequestDispatcher("/DocumentosWeb/Farmacia/actualizarClientes.jsp").forward(request, response);
+                    }
+                }
+                break;
+            case "eliminar":
+                paciente.setCui(request.getParameter("cui"));
+                if (paciente.EliminarPaciente(conexion)) {
+                    request.getSession().setAttribute("Guardado", "eliminado");
+                    ArrayList<Paciente> pacientes1 = paciente.listarPacientes(conexion);
+                    request.setAttribute("pacientes", pacientes1);
+                    if (request.getParameter("pm1").equals("R")) {
+                        getServletContext().getRequestDispatcher("/DocumentosWeb/Recepcion/actualizarClientes.jsp").forward(request, response);
+                    } else {
+                        getServletContext().getRequestDispatcher("/DocumentosWeb/Farmacia/actualizarClientes.jsp").forward(request, response);
+                    }
+                } else {
+                    request.getSession().setAttribute("Guardado", "noEliminado");
+                    ArrayList<Paciente> pacientes1 = paciente.listarPacientes(conexion);
+                    request.setAttribute("pacientes", pacientes1);
+                    if (request.getParameter("pm1").equals("R")) {
+                        getServletContext().getRequestDispatcher("/DocumentosWeb/Recepcion/actualizarClientes.jsp").forward(request, response);
+                    } else {
+                        getServletContext().getRequestDispatcher("/DocumentosWeb/Farmacia/actualizarClientes.jsp").forward(request, response);
+                    }
+                }
                 break;
         }
 

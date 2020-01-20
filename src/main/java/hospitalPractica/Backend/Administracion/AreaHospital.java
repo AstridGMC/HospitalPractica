@@ -53,7 +53,22 @@ public class AreaHospital {
         this.salarioArea = salarioArea;
     }
     
-    
+     public int obtenerIDAreaNombre(Connection conexion, String nombreArea){
+        PreparedStatement ps1 = null;
+        ResultSet rs = null;
+        String sql = "SELECT idAreaHospital FROM AreasHospital WHERE nombreArea = ? ;";
+        try {
+            ps1 = conexion.prepareStatement(sql);
+            ps1.setString(1, nombreArea);
+            rs = ps1.executeQuery();
+            rs.first();
+            int area = rs.getInt("idAreaHospital");
+            return area;
+        } catch (SQLException e) {
+            System.out.println("error leyendo id Hospital " + e);
+            return 0;
+        }
+    }
     
     public boolean nuevaAreaHospital(Connection conexion){
         PreparedStatement ps1 = null;
@@ -104,6 +119,22 @@ public class AreaHospital {
             return 0;
         }
     }
+    public int obtenerIDArea1(Connection conexion, String nombreRango){
+        PreparedStatement ps1 = null;
+        ResultSet rs = null;
+        String sql = "SELECT idAreaHospital FROM AreasHospital WHERE nombreArea = ? ;";
+        try {
+            ps1 = conexion.prepareStatement(sql);
+            ps1.setString(1, nombreRango);
+            rs = ps1.executeQuery();
+            rs.first();
+            int area = rs.getInt("idAreaHospital");
+            return area;
+        } catch (SQLException e) {
+            System.out.println("error leyendo id areas " + e);
+            return 0;
+        }
+    }
     
     public int obtenerIDMayorArea(Connection conexion){
        PreparedStatement ps1 = null;
@@ -123,7 +154,7 @@ public class AreaHospital {
     
     public ArrayList<AreaHospital> listarAreas(Connection conexion){
         Rango rangosArea = new Rango();
-        AreaHospital area = new AreaHospital();
+        AreaHospital area;
         ArrayList<AreaHospital> areas = new ArrayList();
          PreparedStatement ps1;
         ResultSet rs;
@@ -132,11 +163,12 @@ public class AreaHospital {
             ps1 = conexion.prepareStatement(sql);
             rs = ps1.executeQuery();
             while (rs.next()) {
+                 area = new AreaHospital();
                area.setNombreArea(rs.getString("nombreArea"));
                area.setIdAreaHospital(rs.getInt("idAreaHospital"));
+               System.out.println(area.getNombreArea()+" areas");
                area.setRangos(rangosArea.listarRangosPorArea(conexion, area.getIdAreaHospital()));
                areas.add(area);
-               
             } 
         } catch (SQLException e) {
             System.out.println("no se pudo listar areas y rangos");

@@ -3,6 +3,9 @@
     Created on : 10/11/2019, 10:19:15 AM
     Author     : astridmc
 --%>
+<%@page import="hospitalPractica.Backend.Administracion.Rango"%>
+<%@page import="hospitalPractica.Backend.Administracion.AreaHospital"%>
+<%@page import="java.util.ArrayList"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -75,27 +78,46 @@
                         </div>
                     </div>
                     <div class="form-group" id="divSegundo">
-                        <label>Rango</label>
-                        <select name = "miRango">
-                            <c:forEach var="element" items="${rangos1}">
-                                <option name="miRango" value="${element}">${element}</option>
-                            </c:forEach>
-                        </select> 
-                        <div class="form-group" id="div3">
-                            <div class="col-sm-10">
-                                <label >Salario</label>
-                                <input  type='number' 
-                                        name="salario" id="salario" required>
+                         <label>Area </label>
+                        <select name="rangoArea">
+                            <option selected>...</option>
+                            <%  ArrayList<AreaHospital> areas = (ArrayList) request.getAttribute("areasHospital");
+                                System.out.println(areas.size() + "  tamanio arreglo areas");
+                                for (int i = 0; i < areas.size(); i++) {
+                                    System.out.println(i);
+                                    AreaHospital area = areas.get(i);
+                                    String nombreArea = area.getNombreArea();
+                                    System.out.println(areas.get(i).getNombreArea()+ "  nombre Area");
+                            %>
+                            <optgroup label="<%=areas.get(i).getNombreArea()%>">
+                            
+                            <%
+                               ArrayList<String> rangos = area.getRangos();
+                                for (int j = 0; j < rangos.size(); j++) {
+                                    String rango = rangos.get(j);
+                                    System.out.println(rango);
+                            %>
+                            <option  value="<%=nombreArea%>-<%=rango%>"><%=rango%></option>
+                            <%}%>
+                            </optgroup>
+                            <%}%>
+                        </select>
+                        <br>
+                            <div class="form-group" id="div3">
+                                <div class="col-sm-10">
+                                    <label >Salario</label>
+                                    <input  type='number' 
+                                            name="salario" id="salario" required>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="col-sm-10" style="font-size:  30px;">
-                            <label class="titulos" style="display: inline"  >Fecha de Contratacion </label>
-                            <input style="display: inline; margin-left: 75px;" id="fechaContratacion" class="fechas" type="date" name="fechaContratacion" size="20" required>
-                            <br>
-                        </div>
-                        <label><input class="imput" type="checkbox" id="IGSS" name="IGSS" value="IGSS"> IGSS</label>
-                        <label><input class="imput" type="checkbox" id="IRTRA" name="IRTRA" value="IRTRA"> IRTRA</label>
+                            <div class="col-sm-10" style="font-size:  30px;">
+                                <label class="titulos" style="display: inline"  >Fecha de Contratacion </label>
+                                <input style="display: inline; margin-left: 75px;" id="fechaContratacion" class="fechas" type="date" name="fechaContratacion" size="20" required>
+                                <br>
+                            </div>
+                            <label><input class="imput" type="checkbox" id="IGSS" name="IGSS" value="IGSS"> IGSS</label>
+                            <label><input class="imput" type="checkbox" id="IRTRA" name="IRTRA" value="IRTRA"> IRTRA</label>
                     </div>
                     <input type="submit" name='boton' id="boton" class="btn btn-success" value="GuardarEmpelado">
                 </form>

@@ -5,6 +5,7 @@
  */
 package hospitalPractica.Backend.Farmacia;
 
+import hospitalPractica.Backend.Administracion.Factura;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -64,10 +65,11 @@ public class RegistradorVentaMedicina {
 
     public float  registrarNuevaVenta(Connection conexion, String cuiVendedor, ArrayList<Medicina> medicina, String fecha, int cantidad) {
         PreparedStatement ps1;
+        Factura factura = new Factura();
         float total = 0 ;
         String consulta = "INSERT INTO Vender (idFactura, nombreProducto, cuiVendedor, fecha, cantidad)"
                 + " VALUES (?,?,?,'" + fecha + "',?);";
-        int idFactura = 0;
+        int idFactura = factura.obtenerIDMayorFactura(conexion);
         try {
             for (int i = 0; i < medicina.size(); i++) {
                 Medicina med= medicina.get(i);

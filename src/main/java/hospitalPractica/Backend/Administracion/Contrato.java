@@ -75,14 +75,15 @@ public class Contrato {
     public boolean nuevoContrato(Connection conexion, String cui) {
         PreparedStatement ps1 = null;
         try {
-            String consulta = "INSERT INTO Contratar (cuiEmpleado, fechaInicio, rango, IGSS, IRTRA)"
-                    + " VALUES (?,?,?,?,?);";
+            String consulta = "INSERT INTO Contratar (cuiEmpleado, fechaInicio, rango, IGSS, IRTRA, idAreaHospital)"
+                    + " VALUES (?,?,?,?,?, ?);";
             ps1 = conexion.prepareStatement(consulta);
             ps1.setString(1, cui);
             ps1.setDate(2, fechaInicio);
             ps1.setString(3, rango);
             ps1.setBoolean(4, IGSS);
             ps1.setBoolean(5, IRTRA);
+            ps1.setInt(6, idArea);
             ps1.executeUpdate();
             System.out.println("Contrato ----- guardado");
             return true;

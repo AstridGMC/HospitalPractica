@@ -5,6 +5,7 @@
  */
 package hospitalPractica.Backend;
 
+import hospitalPractica.Backend.Administracion.Empleado;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -14,6 +15,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import javax.servlet.http.HttpServletResponse;
 
 public class Usuario {
@@ -23,6 +25,10 @@ public class Usuario {
     private String nombreUsuario;
     private String rango;
     private InputStream foto;
+    private String area;
+    private float salario;
+    private Empleado empleado;
+    private boolean estado;
 
     public String getNombreUsuario() {
         return nombreUsuario;
@@ -64,6 +70,40 @@ public class Usuario {
         this.foto = foto;
     }
 
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public float getSalario() {
+        return salario;
+    }
+
+    public void setSalario(float salario) {
+        this.salario = salario;
+    }
+
+    public Empleado getEmpleado() {
+        return empleado;
+    }
+
+    public void setEmpleado(Empleado empleado) {
+        this.empleado = empleado;
+    }
+
+    public boolean isEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
+    }
+    
+    
+    
     public String validarNombre(Connection conexion) {
         PreparedStatement validarNombre = null;
 
@@ -234,5 +274,83 @@ public class Usuario {
             System.out.println("error No se ha guardado el Perfil" + e);
         }
     }
+    
+    public Usuario ObtenerInfoUsuario(Connection conexion, String cui){
+        PreparedStatement validarNombre;
+        Empleado empleado = new Empleado();
+        Usuario usuario = new Usuario();
+        try {
+            String consulta1 = "SELECT nombreUsuario, rango, password, estado FROM Usuario WHERE cuiUsuario = ?;";
+            validarNombre = conexion.prepareStatement(consulta1);
+            validarNombre.setString(1, cui);
+            ResultSet rs = validarNombre.executeQuery();
+            System.out.println(rs.first());
+            usuario.setNombreUsuario(rs.getString("nombreUsuario"));
+            usuario.setRango(rs.getString("rango"));
+            usuario.setEstado(rs.getBoolean("estado"));
+            usuario.setPassword(rs.getString("password"));
+            usuario.setEmpleado(empleado.ObtenerInfoEmpleado(conexion, cui));
+            usuario.setCui(cui);
+            return usuario;
+        } catch (SQLException e) {
+            System.out.println("info usuario no encontrada " + e);
+            return null;
+        }
+    }
+    
+    public ArrayList<Usuario> listarUsuarios(Connection conexion){
+        PreparedStatement ps1;
+        ResultSet rs;
+        ArrayList<Usuario> list = new ArrayList<>();
+        String sql = "SELECT cuiUsuario FROM Usuario";
+        try {
+            ps1 = conexion.prepareStatement(sql);
+            rs = ps1.executeQuery();
 
+            while (rs.next()) {
+                System.out.println(rs.getRow());
+                Usuario usuario = ObtenerInfoUsuario(conexion, rs.getString("cuiUsuario"));
+                list.add(usuario);
+            }
+        } catch (SQLException e) {
+            System.out.println("no se encontraron pacientes " + e);
+        }
+        return list;
+    }
+    
+    public boolean ModificarUsuario(Connection conexion){
+         PreparedStatement ps2;
+        String sql1 = "UPDATE hospitalPractica.Usuario SET nombreUsuario = ?, rango = ?, password =  ?, estado = ?  WHERE cuiUsuario = '"+cui+"';";
+        try {
+            System.out.println(conexion.isClosed());
+            ps2=conexion.prepareStatement(sql1);
+            ps2.setString(1, nombreUsuario);
+            ps2.setString(2, rango);
+            ps2.setString(3, password);
+            ps2.setBoolean(4, estado);
+            System.out.println(ps2.executeUpdate());
+            System.out.println("usuario Actualizado " + nombreUsuario  + "pppp"+cui +"    "+estado+"  "+rango+ "   "+password);
+            return true;
+        } catch (SQLException e) {
+            System.out.println("error al actualizar usuario " + cui + "  " + e);
+            return false;
+        }
+    }
+    
+    public boolean EliminarUsuario(Connection conexion){
+        PreparedStatement eliminarPaciente = null;
+        String consulta = "DELETE FROM  Usuario WHERE cuiUsuario = ? ;";
+        try {
+            eliminarPaciente = conexion.prepareStatement(consulta);
+            eliminarPaciente.setString(1, cui);
+            eliminarPaciente.executeUpdate();
+            System.out.println("usuario eliminado de la base de datos");
+            return true;
+
+        } catch (SQLException e) {
+            System.out.println("error eliminando usuario de la base de datos " + e);
+            return false;
+        }
+    
+    }
 }

@@ -100,10 +100,11 @@ public class ManejadorAdministracion extends HttpServlet {
         String boton = request.getParameter("boton");
         switch (boton) {
             case "Guardar Habitacion":
-                request.setAttribute("numeroHabitacion", habitacion.obtenerId(conexion) + 1);
+                
                 habitacion.setCostoMantenimiento(Float.parseFloat(request.getParameter("costoHabitacion")));
                 habitacion.setPrecio(Float.parseFloat(request.getParameter("precioHabitacion")));
                 if (habitacion.registrarNueva(conexion)) {
+                    request.setAttribute("numeroHabitacion", habitacion.obtenerId(conexion) + 1);
                     request.setAttribute("Guardado", "Guardado");
                     getServletContext().getRequestDispatcher("/DocumentosWeb/Administracion/registrarNuevaHabitacion.jsp").forward(request, response);
                 } else {
@@ -139,35 +140,56 @@ public class ManejadorAdministracion extends HttpServlet {
                 
             case "ModificarCuarto":
                 habitacion.setNoCuarto(Integer.parseInt(request.getParameter("numeroDeCuarto")));
+                System.out.println(habitacion.getNoCuarto());
                 habitacion.setCostoMantenimiento(Float.parseFloat(request.getParameter("costoMantenimiento")));
                 habitacion.setPrecio(Float.parseFloat(request.getParameter("precioHabitacion")));
-                habitacion.setDisponivilidad(Boolean.valueOf(request.getParameter("didponibilidad")));
-                if(habitacion.actualizarHabitacion(conexion)){
+                if(request.getParameter("didponibilidad").equals("Disponible")){
+                    habitacion.setDisponivilidad(true);
+                }else if(request.getParameter("didponibilidad").equals("No Disponible")){
+                    habitacion.setDisponivilidad(false);
+                }
+                
+                int numeroC = Integer.parseInt(request.getParameter("numeroCuarto1"));
+                if(habitacion.actualizarHabitacion(conexion, numeroC)){
                     request.getSession().setAttribute("Guardado", "Guardado");
                     request.setAttribute("habitaciones", habitacion.listarCuartos(conexion));
-                    getServletContext().getRequestDispatcher("/DocumentosWeb/Administracion/modificacionCuartosHotel.jsp").forward(request, response);
+                    getServletContext().getRequestDispatcher("/DocumentosWeb/Administracion/modificacionCuartosHospital.jsp").forward(request, response);
                 }else{
                     request.getSession().setAttribute("Guardado", "noGuardado");
-                }   request.setAttribute("habitaciones", habitacion.listarCuartos(conexion));
-                    getServletContext().getRequestDispatcher("/DocumentosWeb/Administracion/modificacionCuartosHotel.jsp").forward(request, response);
+                    request.setAttribute("habitaciones", habitacion.listarCuartos(conexion));
+                    getServletContext().getRequestDispatcher("/DocumentosWeb/Administracion/modificacionCuartosHospital.jsp").forward(request, response);
+ 
+                }  
                 break;
             case "ModificarMedicina":
-                medicina.setNombre(request.getParameter("nombre"));
+                medicina.setNombre(request.getParameter("medincinaNombre"));
                 medicina.setCosto(Float.parseFloat(request.getParameter("costo")));
                 medicina.setPrecio(Float.parseFloat(request.getParameter("precio")));
-                medicina.setExistencia(Integer.parseInt(request.getParameter("existenciaMinima")));
+                medicina.setExistenciaMinima(Integer.parseInt(request.getParameter("existenciaMinima")));
                 medicina.setDescripcion(request.getParameter("descripcion"));
                 medicina.setExistenciaMinima(Integer.parseInt(request.getParameter("existencia")));
                 if(inventario.editarMedicina(conexion, medicina)){
                     request.getSession().setAttribute("Guardado", "Guardado");
                     request.setAttribute("rango", "Administrador");
                     request.setAttribute("medicinas", inventario.listarExistencias(conexion));
-                    getServletContext().getRequestDispatcher("/DocumentosWeb/Farmacia/editarMedicina.jsp").forward(request, response);
+                    getServletContext().getRequestDispatcher("/DocumentosWeb/Administracion/modificarMedicinas.jsp").forward(request, response);
                 }else{
                     request.getSession().setAttribute("Guardado", "noGuardado");
                     request.setAttribute("rango", "Administrador");
                     request.setAttribute("medicinas", inventario.listarExistencias(conexion));
-                    getServletContext().getRequestDispatcher("/DocumentosWeb/Farmacia/editarMedicina.jsp").forward(request, response);
+                    getServletContext().getRequestDispatcher("/DocumentosWeb/Administracion/modificarMedicinas.jsp").forward(request, response);
+                }
+                break;
+            case "eliminar":
+                habitacion.setNoCuarto(Integer.parseInt(request.getParameter("numeroDeCuarto")));
+                if(habitacion.EliminarHabitacion(conexion)){
+                    request.getSession().setAttribute("Guardado", "eliminado");
+                    request.setAttribute("habitaciones", habitacion.listarCuartos(conexion));
+                    getServletContext().getRequestDispatcher("/DocumentosWeb/Administracion/modificacionCuartosHospital.jsp").forward(request, response);
+                }else{
+                    request.getSession().setAttribute("Guardado", "noEliminado");
+                    request.setAttribute("habitaciones", habitacion.listarCuartos(conexion));
+                    getServletContext().getRequestDispatcher("/DocumentosWeb/Administracion/modificacionCuartosHospital.jsp").forward(request, response);
                 }
                 break;
         }

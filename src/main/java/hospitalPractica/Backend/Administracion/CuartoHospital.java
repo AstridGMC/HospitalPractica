@@ -55,7 +55,7 @@ public class CuartoHospital {
     
     public ArrayList<CuartoHospital> listarCuartos(Connection conexion){
          ArrayList<CuartoHospital> habitaciones = new ArrayList();
-        CuartoHospital cuarto = new CuartoHospital();
+        CuartoHospital cuarto;
         PreparedStatement ps1;
         ResultSet rs = null;
         String sql="SELECT * FROM Habitacion;";
@@ -63,10 +63,12 @@ public class CuartoHospital {
             ps1=conexion.prepareStatement(sql);
             rs = ps1.executeQuery();
             while(rs.next()){
+                cuarto = new CuartoHospital();
                 cuarto.setNoCuarto(rs.getInt("NoHabitacion"));
                 cuarto.setPrecio(rs.getFloat("precioHabitacion"));
                 cuarto.setCostoMantenimiento(rs.getFloat("costoMantenimiento"));
                 cuarto.setDisponivilidad(rs.getBoolean("disponibilidad"));
+                habitaciones.add(cuarto);
             }
            
         } catch (SQLException e) {
@@ -78,7 +80,7 @@ public class CuartoHospital {
     
     public boolean ocuparCuarto(Connection conexion){
         PreparedStatement ps1;
-        String sql="UPDATE HabitacionHospital SET disponibilidad = ? WHERE NoHabitacion= ?;";
+        String sql="UPDATE Habitacion SET disponibilidad = ? WHERE NoHabitacion= ?;";
         try {
             ps1=conexion.prepareStatement(sql);
             ps1.setBoolean(1, false );
@@ -94,7 +96,7 @@ public class CuartoHospital {
     
     public boolean desocuparCuarto(Connection conexion){
         PreparedStatement ps1;
-        String sql="UPDATE HabitacionHospital SET disponibilidad = ? WHERE NoHabitacion= ?;";
+        String sql="UPDATE Habitacion SET disponibilidad = ? WHERE NoHabitacion= ?;";
         try {
             ps1=conexion.prepareStatement(sql);
             ps1.setBoolean(1, true);
@@ -108,16 +110,17 @@ public class CuartoHospital {
         }
     }
     
-    public boolean actualizarHabitacion(Connection conexion){
+    public boolean actualizarHabitacion(Connection conexion, int numeroC){
         PreparedStatement ps1;
-        String sql="UPDATE HabitacionHospital SET costoMantenimiento = ?, precioHabitacion = ?, disponibilidad =  ?  WHERE NoHabitacion= ?;";
+        String sql="UPDATE Habitacion SET costoMantenimiento = ?, precioHabitacion = ?, disponibilidad =  ?, NoHabitacion =  ?   WHERE NoHabitacion= ?;";
         try {
             ps1=conexion.prepareStatement(sql);
             ps1.setFloat(1, costoMantenimiento);
             ps1.setFloat(2, precio);
             ps1.setBoolean(3, disponivilidad);
             ps1.setInt(4, noCuarto);
-            ps1.executeUpdate();
+            ps1.setInt(5, numeroC);
+            System.out.println(ps1.executeUpdate());
             System.out.println("habitacion actualizada");
             return true;
         } catch (SQLException e) {
@@ -146,12 +149,11 @@ public class CuartoHospital {
         PreparedStatement ps1 = null;
         try {
             Vacacion misVaca= new Vacacion();
-            String consulta = "INSERT INTO Habitacion (NoHabitacion, costoMantenimiento, precioHabitacion )"
-                    + " VALUES (?,?,?);";
-            ps1 = conexion.prepareStatement(consulta);
-            ps1.setInt(1, noCuarto);
-            ps1.setFloat(2, costoMantenimiento);
-            ps1.setFloat(3, precio);
+            String consulta = "INSERT INTO Habitacion ( costoMantenimiento, precioHabitacion )"
+                    + " VALUES (?,?);";
+            ps1 = conexion.prepareStatement(consulta);;
+            ps1.setFloat(1, costoMantenimiento);
+            ps1.setFloat(2, precio);
             ps1.executeUpdate();
             System.out.println("Habitacion Guardada");
            return true;
@@ -172,11 +174,27 @@ public class CuartoHospital {
             ps1.setInt(1, numeroCuarto);
             rs = ps1.executeQuery();
             rs.first();
-            System.out.println(rs.getFloat("precioHabitacion")+" precio habitacion");
+            System.out.println(rs.getFloat("precioHabiHospitaltacion")+" precio habitacion");
             return rs.getFloat("precioHabitacion");
         } catch (SQLException e) {
             System.out.println("error leyendo precio habitacion" + e);
             return 0;
+        }
+    }
+    
+    public boolean EliminarHabitacion(Connection conexion) {
+        PreparedStatement eliminarHabitacion = null;
+        String consulta = "DELETE FROM  Habitacion WHERE noHabitacion = ? ;";
+        try {
+            eliminarHabitacion = conexion.prepareStatement(consulta);
+            eliminarHabitacion.setInt(1, noCuarto);
+            eliminarHabitacion.executeUpdate();
+            System.out.println("cuarto Hospital eliminado de la base de datos");
+            return true;
+
+        } catch (SQLException e) {
+            System.out.println("error eliminando cuarto de la base de datos " + e);
+            return false;
         }
     }
 }

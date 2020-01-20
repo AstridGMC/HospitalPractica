@@ -28,14 +28,14 @@
         <nav>
              <div class="navbar1">
                 <a href="<%=request.getContextPath()%>/DocumentosWeb/Recepcion/paginaInicioR.jsp">Inicio</a>
-                <a href="<%=request.getContextPath()%>/EditarPerfil">Cambiar Imagen</a>
+                <a href="<%=request.getContextPath()%>/Empleados?pm=ModificarMiUsuario">Modificar Usuario</a>
                 <div class="dropdown3">
                     <button class="dropbtn3">Clientes
                         <i class="fa fa-caret-down"></i>
                     </button>
                     <div class="dropdown-content1">
                         <a href="<%=request.getContextPath()%>/DocumentosWeb/Recepcion/nuevoCliente.jsp">Nuevo Cliente</a>
-                        <a href="#">Editar Datos </a>
+                        <a href="<%=request.getContextPath()%>/ManejadorPaciente?pm=ModificarPacientesR">Editar Datos </a>
                     </div>
                 </div>
                 <div class="dropdown3">
@@ -43,7 +43,7 @@
                         <i class="fa fa-caret-down"></i>
                     </button>
                     <div class="dropdown-content1">
-                        <a href="<%=request.getContextPath()%>/ManejadorPaciente">Agendar Nueva Cita</a>
+                        <a href="<%=request.getContextPath()%>/ManejadorPaciente?pm=NuevaConsulta">Agendar Nueva Cita</a>
                         <a href="#">Cobrar Cita</a>
                         <a href="#">Ver Citas</a>
                         <a href="#">Cambiar Citas</a>

@@ -14,7 +14,7 @@
         <title>Registrar Medicina</title>
     </head>
     <body>
-         <%@include  file= "headerFarmaceuta.jsp"%>
+        <%@include  file= "headerFarmaceuta.jsp"%>
         <div style="padding-top: 320px; padding-left: 16%;">
             <h1 id="titulo">Registrar Nueva Medicina</h1>
             <div class="form-group" id="div1">
@@ -28,7 +28,10 @@
                         Costo:  <input class="ingresoNumero" id="costo" type="number" name="costo" pattern=".{13}" required >
                         Existencia Minima:  <input class="ingresoNumero"  id="existenciaMin" type="number" name="existenciaMin" required >
                         Existencia:  <input id="existencia" type="number" name="existencia" required >
+                        <br>
+                        <br>Fecha de Ingreso  <input class="fechas" type="date" name="fecha" size="20" id="fechaActual" required>
                     </div>
+
                     <input type="submit" class="form-control" name="boton"  id="botonAgregar" value ="nuevaMedicina">
                 </form>
             </div>

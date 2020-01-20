@@ -42,15 +42,17 @@
                             <td id="11" value="<%=medicina.getNombre()%>"><%=medicina.getNombre()%> </td>
                             <td><div> <input name='precio' type="text" id ="22"   value="<%=medicina.getPrecio()%>"></imput></div></td>
                             <td> <div><input name='costo' style="width: 100px;" id="33" type="number"  value="<%=medicina.getCosto()%>"> </div> </td>
-                            <td> <div ><input name='descripcion' style="width: 100px;"id="44" type="number"  value="<%=medicina.getDescripcion()%>"> </div></td>
+                            <td> <div ><input name='descripcion' style="width: 200px;"id="44" type="text"  value="<%=medicina.getDescripcion()%>"> </div></td>
                             <td id="55" ame='existenciaMinima' value="<%=medicina.getExistenciaMinima()%>"><%=medicina.getExistenciaMinima()%> </td>
-
-                            <%}%>
+                                <input name='medincinaNombre'  value='<%=medicina.getNombre()%>' style="display:none" >
+                                 <input name='existenciaMinima'  value='<%=medicina.getExistenciaMinima()%>' style="display:none" >
+                                  <input name='existencia'  value='<%=medicina.getExistencia()%>' style="display:none" >
                             <td>
-
+                                 
                                 <div class="alert alert-success alert-dismissable">
-                                    <input onclick="capturar()" type="submit"  name="boton"  value="ModificarCuarto"></div>
+                                    <input onclick="capturar()" type="submit"  name="boton"  value="ModificarMedicina"></div>
                             </td>
+                             <%}%>
                         </form>
                         </tr>
                     </table>

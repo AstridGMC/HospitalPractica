@@ -133,7 +133,6 @@
                     <form action="<%=request.getContextPath()%>/RegistrarVentaNueva" method="POST">
                         <div class="form-group" id="div4">
                             <div class="col-sm-10">
-                               
                                 <% request.setAttribute("arregloMed", medicinas);%>
                                 Fecha de Creacion  <input class="fechas" type="date" name="fecha" size="20" id="fechaActual" required>
                                 <input type="submit" class="form-control" name="boton"  id="botonFinalizar" value ="Finalizar Venta y Generar Factura">

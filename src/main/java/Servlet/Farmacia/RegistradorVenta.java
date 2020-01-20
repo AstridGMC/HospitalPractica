@@ -5,23 +5,33 @@
  */
 package Servlet.Farmacia;
 
+import Servlet.Administracion.manejadorReportesAdmin;
 import Servlet.InicioSesion;
 import hospitalPractica.Backend.Administracion.Factura;
 import hospitalPractica.Backend.Farmacia.Inventario;
 import hospitalPractica.Backend.Farmacia.Medicina;
 import hospitalPractica.Backend.Paciente;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperRunManager;
 
 /**
  *
@@ -33,6 +43,7 @@ public class RegistradorVenta extends HttpServlet {
 
     ArrayList<Medicina> medicinas = new ArrayList();
     Medicina medicina = new Medicina();
+    
     Connection conexion = InicioSesion.conexion;
 
     /**
@@ -68,8 +79,7 @@ public class RegistradorVenta extends HttpServlet {
         } else {
             medicinas.clear();
             getServletContext().getRequestDispatcher("/DocumentosWeb/Farmacia/nuevaVenta.jsp").forward(request, response);
-        }
-
+        }    
     }
 
     /**
@@ -142,7 +152,7 @@ public class RegistradorVenta extends HttpServlet {
                 if (crearFactura(conexion, cui, medicinasVendidas, fecha, cuiCliente)) {
                     medicinas.clear();
                     request.getSession().setAttribute("Guardado", "Guardado");
-                    getServletContext().getRequestDispatcher("/DocumentosWeb/Farmacia/nuevaVenta.jsp").forward(request, response);
+                    getServletContext().getRequestDispatcher("/DocumentosWeb/Farmacia/factura.jsp").forward(request, response);
                 } else {
                     request.getSession().setAttribute("Guardado", "noGuardado");
                     medicinas.clear();
@@ -165,7 +175,8 @@ public class RegistradorVenta extends HttpServlet {
 
     public float registrarNuevaVenta(Connection conexion, String cuiVendedor, ArrayList<Medicina> medicina, String fecha) {
         PreparedStatement ps1;
-        int idFactura =1;
+        Factura facura = new Factura();
+        int idFactura =facura.obtenerIDMayorFactura(conexion);
         float total = 0;
         String consulta = "INSERT INTO Vender (nombreProducto, cuiVendedor, fecha, cantidad, idFactura)"
                 + " VALUES (?,?,'" + fecha + "',?,?);";
@@ -212,10 +223,10 @@ public class RegistradorVenta extends HttpServlet {
     }
 
     public float calcularTotal(ArrayList<Medicina> medicinas) {
-        float total = 0;
+        float total=0;
         for (int i = 0; i < medicinas.size(); i++) {
             Medicina med = medicinas.get(i);
-            total = total + med.getPrecio();
+            total = (total + (med.getPrecio()*med.getExistenciaMinima()));
         }
         return total;
     }

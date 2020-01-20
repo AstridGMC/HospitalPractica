@@ -4,11 +4,13 @@
  * and open the template in the editor.
  */
 package Servlet;
+import hospitalPractica.Backend.Administracion.AreaHospital;
 import hospitalPractica.Backend.Administracion.CuartoHospital;
 import hospitalPractica.Backend.Paciente;
 import hospitalPractica.Backend.PacienteInternado;
 import hospitalPractica.Backend.ServiciosMedicos.ManejadorDeAtencion;
 import hospitalPractica.Backend.ServiciosMedicos.Servicio;
+import hospitalPractica.Backend.ServiciosMedicos.ServicioEspecial;
 import java.io.IOException;
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -29,6 +31,7 @@ public class ManejadorAtencion extends HttpServlet {
     PacienteInternado pacienteInternado = new PacienteInternado();
     CuartoHospital cuarto = new CuartoHospital();
     Servicio miServicio = new Servicio();
+    ServicioEspecial servicioEsp = new ServicioEspecial();
     Paciente paciente = new Paciente();
     Connection conexion = InicioSesion.conexion;
 
@@ -67,6 +70,16 @@ public class ManejadorAtencion extends HttpServlet {
                 request.setAttribute("Cuartos", cuartos);
                 request.setAttribute("Servicios", servicios);
                 getServletContext().getRequestDispatcher("/DocumentosWeb/Enfermeria/registrarPacienteInternado.jsp").forward(request, response);
+                break;
+            case "modificarTarifario":
+                request.setAttribute("servicio", miServicio.listarServicios(conexion));
+                request.setAttribute("servicioEspecial", servicioEsp.listarServiciosEspeciales(conexion));
+                getServletContext().getRequestDispatcher("/DocumentosWeb/Administracion/modificarTarifario.jsp").forward(request, response);
+                break;
+            case "nuevoServicioHospital":
+                AreaHospital area = new AreaHospital();
+                request.setAttribute("areas", area.listarAreas(conexion));
+                getServletContext().getRequestDispatcher("/DocumentosWeb/Administracion/nuevoServicioHospital.jsp").forward(request, response);
                 break;
         }
 

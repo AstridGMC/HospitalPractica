@@ -56,9 +56,8 @@ public class Rango {
         }
         return list;
     }
-    
-    
-    public boolean guardarNuevoRango(Connection conexion, String nombreRango, float sueldo){
+
+    public boolean guardarNuevoRango(Connection conexion, String nombreRango, float sueldo) {
         PreparedStatement ps1;
         String sql = "INSERT INTO Rango (rango, sueldo) VALUES (?, ?) ";
         try {
@@ -66,15 +65,15 @@ public class Rango {
             ps1.setString(1, nombreRango);
             ps1.setFloat(2, sueldo);
             ps1.executeUpdate();
-           return true;
+            return true;
         } catch (SQLException e) {
             System.out.println("no se encontro rangos " + e);
             return false;
         }
     }
-    
-    public boolean agregarRangosAreas(Connection conexion, String[] misRangos,int idArea ){
-        String sql = "INSERT INTO Dispone (rango, idAreaHospital) VALUES (?, ?)";        
+
+    public boolean agregarRangosAreas(Connection conexion, String[] misRangos, int idArea) {
+        String sql = "INSERT INTO Dispone (rango, idAreaHospital) VALUES (?, ?)";
         PreparedStatement ps1;
         System.out.println(idArea);
         try {
@@ -89,11 +88,11 @@ public class Rango {
             System.out.println("no se pudo agregar rangos " + e);
             return false;
         }
-        
+
     }
-    
-     public float obtenerSalario(Connection conexion, String rango){
-         PreparedStatement ps1 = null;
+
+    public float obtenerSalario(Connection conexion, String rango) {
+        PreparedStatement ps1 = null;
         ResultSet rs = null;
         String sql = "SELECT sueldo FROM Rango WHERE rango = ? ;";
         try {
@@ -108,9 +107,8 @@ public class Rango {
             return 0;
         }
     }
-     
-     public ArrayList<String> listarRangosPorArea(Connection conexion,int  idAreaHospital) {
-        System.out.println("listando Existencias");
+
+    public ArrayList<String> listarRangosPorArea(Connection conexion, int idAreaHospital) {
         PreparedStatement ps1;
         ResultSet rs;
         ArrayList<String> list = new ArrayList<>();
@@ -120,10 +118,9 @@ public class Rango {
             ps1.setInt(1, idAreaHospital);
             rs = ps1.executeQuery();
             while (rs.next()) {
-                if (!"Administrador".equals(rs.getString("Rango"))) {
-                    System.out.println(rs.getRow());
-                    list.add(rs.getString("Rango"));
-                }
+                System.out.println(rs.getRow());
+                list.add(rs.getString("Rango"));
+                System.out.println("este es el rango de "+ idAreaHospital);
             }
         } catch (SQLException e) {
             System.out.println("no se encontro rangos " + e);

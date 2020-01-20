@@ -15,6 +15,42 @@
         <title>Editar Medina</title>
     </head>
     <body>
+        <%  if (session.getAttribute("Guardado") != null) {
+                String strExpired = (String) session.getAttribute("Guardado");
+                System.out.println(strExpired);
+                if (strExpired.equals("Guardado")) {
+                    session.setAttribute("Guardado", null);
+        %>
+        <script>
+
+            alert("la medicina se ha actualizado Con Exito");
+
+        </script>
+        <% } else if (strExpired.equals("noGuardado")) {
+            session.setAttribute("Guardado", null);%>
+        <script>
+
+            alert("la medicina no ha podido actualizarse");
+
+        </script>
+        <% }else if (strExpired.equals("eliminado")) {
+                session.setAttribute("Guardado", null);%>
+        <script>
+
+            alert("La medicina ha sido eliminada de la base de datos");
+
+        </script>
+        <%} else if (strExpired.equals("noEliminado")) {
+            session.setAttribute("Guardado", null);%>
+        %>
+        <script>
+
+            alert("La medicina no ha sido eliminada debido a que aun se encuentran existencias disponibles");
+
+        </script>
+        <%}
+        session.setAttribute("Guardado", null);
+    }%>
         <%@include  file= "headerFarmaceuta.jsp"%>
         <div  style="padding-top: 320px; padding-left: 14%; padding-right: 300px;">
             <div>
@@ -30,17 +66,16 @@
                         </tr>
                     </thead>
 
-                    <%                        ArrayList<Medicina> medicinas = (ArrayList) request.getAttribute("medicinasActualizar");
+                    <%  ArrayList<Medicina> medicinas = (ArrayList) request.getAttribute("medicinasActualizar");
                         System.out.println(medicinas.size() + "  tamanio arreglo medicina");
                         for (int i = 0; i < medicinas.size(); i++) {
                             Medicina medicina = medicinas.get(i);
-                            String nombreMedicina = medicina.getNombre();
                             System.out.println(medicina.getNombre());
                     %>
 
                     <tr> 
                     <form action='<%=request.getContextPath()%>/RegistradorMedicina' method='POST'>
-                         <td name = "nombreProducto" id="11" value="<%=medicina.getNombre()%>"><%=medicina.getNombre()%></td>
+                        <td name = "nombreProducto" id="11" value="<%=medicina.getNombre()%>"><%=medicina.getNombre()%></div></td>
                         <td ><div> <input  name = "descripcion" oninput="capturar();" type="text" id ="22"   value= ' <%=medicina.getDescripcion()%>'></div></td>
                         <td  > <div><input name = "existenciaMinima" style="width: 100px;" id="33" type="number"  value="<%=medicina.getExistenciaMinima()%>"> </div> </td>
                         <td  > <div ><input  name = "precio" style="width: 100px;"id="44" type="number"  value="<%=medicina.getPrecio()%>"> </div></td>
@@ -49,10 +84,9 @@
                             <input name="existencia" value="<%=medicina.getExistencia()%>" style="display: none;">
                             <input name="nombre" value="<%=medicina.getNombre()%>" style="display: none;">
                             <div class="alert alert-success alert-dismissable">
-                               
                                 <input type="submit"  name="boton"  value="actualizarMedicina"></div>
-
                         </td>
+                        <td><input type="submit" style="background-color: #efa2a9; color: black; margin-top: 20%;" name="boton" value="eliminar"></td>
                     </form>
                     </tr>
                     <%}%>

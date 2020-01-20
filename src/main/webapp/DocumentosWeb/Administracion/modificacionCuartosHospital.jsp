@@ -17,22 +17,22 @@
     <body>
         <div>
             <%  if (session.getAttribute("Guardado") != null) {
-                String strExpired = (String) session.getAttribute("Guardado");
-                System.out.println(strExpired);
-                if (strExpired.equals("Guardado")) {
-                    session.setAttribute("Guardado", null);
-                %>
-                <script>
-                    alert("se ha modificado el cuarto de hospital especificado");
-                </script>
-                <% } else if (strExpired.equals("noGuardado")) {
-                    session.setAttribute("Guardado", null);%>
-                <script>
-                    alert(" el cuarto de hospital especificado  no ha podido Modificarse");
-                </script>
-                <% }
-            }%>
-        <%@include  file= "headerAdministracion.jsp"%>
+                    String strExpired = (String) session.getAttribute("Guardado");
+                    System.out.println(strExpired);
+                    if (strExpired.equals("Guardado")) {
+                        session.setAttribute("Guardado", null);
+            %>
+            <script>
+                alert("se ha modificado el cuarto de hospital especificado");
+            </script>
+            <% } else if (strExpired.equals("noGuardado")) {
+                session.setAttribute("Guardado", null);%>
+            <script>
+                alert(" el cuarto de hospital especificado  no ha podido Modificarse");
+            </script>
+            <% }
+                }%>
+            <%@include  file= "headerAdministracion.jsp"%>
             <div  style="padding-top: 320px; padding-left: 14%; padding-right: 300px;">
                 <h1>Cambiar Precios Habitaciones de Hospital</h1>
                 <div>
@@ -56,25 +56,38 @@
                         %>
 
                         <tr> 
-
-                            <td id="11" value="<%=habitacion.getNoCuarto()%>"><%=habitacion.getNoCuarto()%> </td>
-                            <td><div> <input type="text" id ="22"   value="<%=habitacion.getPrecio()%>"></imput></div></td>
-                            <td> <div><input style="width: 100px;" id="33" type="number"  value="<%=habitacion.getCostoMantenimiento().toString()%>"> </div> </td>
-                            <%if(habitacion.isDisponivilidad()){%>
-                                <td> <div ><input style="width: 100px;"id="44" type="number"  value="Disponible"> </div></td>
-                            <%}else{%>
-                                <td id="44"value="<%=true%>"> No Disponible</td>
+                        <form action='<%=request.getContextPath()%>/Administracion' method='POST'>
+                            <td> <div> <input id="11" name= "numeroDeCuarto" value="<%=habitacion.getNoCuarto()%>"></imput></div></td>
+                            <td><div> <input name='precioHabitacion'  type="text" id ="22"   value="<%=habitacion.getPrecio()%>"></imput></div></td>
+                            <td> <div><input name='costoMantenimiento'  style="width: 100px;" id="33" type="number"  value="<%=habitacion.getCostoMantenimiento().toString()%>"> </div> </td>
+                                    <%if (habitacion.isDisponivilidad()) {%>
+                            <td>
+                                <select name="didponibilidad">
+                                    <option value="Disponible" selected>Disponible</option>
+                                    <option value="No Disponible">No Disponible</option>
+                                </select>
+                            </td>
+                            <%} else {%>
+                            <td>
+                                <select name="didponibilidad">
+                                    <option value="Disponible">Disponible</option>
+                                    <option value="No Disponible" selected>No Disponible</option>
+                                </select>
+                            </td>
                             <%}%>
                             <td>
-                                <form action='<%=request.getContextPath()%>/Administracion' method='POST'>
-                                    <div class="alert alert-success alert-dismissable">
-                                        <input name='numeroDeCuarto' id="1"   style="display:none" >
-                                        <input name='precioHabitacion'  id="2" style="display:none" >
-                                        <input name='costoMantenimiento'  id="3" style="display:none" >
-                                        <input name='didponibilidad'  id="4" style="display:none" >
-                                        <input onclick="capturar()" type="submit"  name="boton"  value="ModificarCuarto"></div>
-                                </form>
+                                <div class="alert alert-success alert-dismissable">
+                                    <input name='numeroCuarto1'  value="<%=habitacion.getNoCuarto()%>" style="display:none" >
+                                    <input name='numeroDeCuarto' id="1"   style="display:none" >
+                                    <input name='precioHabitacion'  id="2" style="display:none" >
+                                    <input name='costoMantenimiento'  id="3" style="display:none" >
+                                    <input name='didponibilidad'  id="4" style="display:none" >
+                                    <input onclick="capturar()" type="submit"  name="boton"  value="ModificarCuarto"></div>
+
                             </td>
+
+                            <td><input style="background-color: #efa2a9; color: black; margin-top: 20%;"  type="submit"  name="boton"  value="eliminar"></div></td>
+                        </form>
                         </tr>
                         <%}%>
                     </table>

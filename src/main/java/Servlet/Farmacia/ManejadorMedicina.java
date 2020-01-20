@@ -9,15 +9,24 @@ import Servlet.InicioSesion;
 import Servlet.InicioSesion;
 import hospitalPractica.Backend.Farmacia.Inventario;
 import hospitalPractica.Backend.Farmacia.Medicina;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperRunManager;
 
 /**
  *
@@ -64,6 +73,32 @@ public class ManejadorMedicina extends HttpServlet {
             request.setAttribute("rango", "Farmaceuta");
             getServletContext().getRequestDispatcher("/DocumentosWeb/Farmacia/editarMedicina.jsp").forward(request, response);
         }
+          if ("ActualizarMedicina".equals(request.getParameter("pagina"))) {
+            ArrayList<Medicina> medicinas = inventario.listarExistencias(conexion);
+            request.setAttribute("medicinasActualizar", medicinas);
+            request.setAttribute("rango", "Farmaceuta");
+            getServletContext().getRequestDispatcher("/DocumentosWeb/Farmacia/editarMedicina.jsp").forward(request, response);
+        }
+            if (request.getParameter("boton").equals("Generar Reporte")) {
+             response.setContentType("application/pdf");
+                ServletContext context = request.getServletContext();
+                System.out.println(context.getRealPath("/DocumentosWeb/Farmacia/reportesMedicinas.jasper"));
+                File reportfile = new File(context.getRealPath("/DocumentosWeb/Farmacia/reportesMedicinas.jasper"));
+
+                Map< String, Object> parameter = new HashMap();
+                byte[] bytes;
+            try {
+                bytes = JasperRunManager.runReportToPdf(reportfile.getPath(), parameter, conexion);                      
+                    response.setContentLength(bytes.length);
+                    ServletOutputStream outputstream = response.getOutputStream();
+                    outputstream.write(bytes, 0, bytes.length);
+                    outputstream.flush();
+                    outputstream.close();
+        
+            } catch (JRException ex) {
+                Logger.getLogger(ManejadorMedicina.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     /**
@@ -72,7 +107,6 @@ public class ManejadorMedicina extends HttpServlet {
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -90,7 +124,8 @@ public class ManejadorMedicina extends HttpServlet {
                 med.setNombre(request.getParameter("nombre"));
                 med.setExistenciaMinima(Integer.parseInt(request.getParameter("existenciaMin")));
                 med.setPrecio(Integer.parseInt(request.getParameter("precio")));
-                if (med.nuevaMedicina(conexion)) {
+                String fecha = request.getParameter("fecha");
+                if (med.nuevaMedicina(conexion, fecha)) {
                     out.println("<script >");
                     out.println("alert('Medicina Guardada Exitosamente');");
                     out.println("location='DocumentosWeb/Farmacia/medicinaNueva.jsp';");
@@ -123,6 +158,25 @@ public class ManejadorMedicina extends HttpServlet {
                     getServletContext().getRequestDispatcher("/DocumentosWeb/Farmacia/editarMedicina.jsp").forward(request, response);
                 }
                 break;
+            case "eliminar":
+
+                med.setNombre(request.getParameter("nombre"));
+                if (med.EliminarMedicina(conexion)) {
+                    request.getSession().setAttribute("Guardado", "eliminado");
+                    ArrayList<Medicina> medicinas1 = inventario.listarExistencias(conexion);
+                    request.setAttribute("medicinasActualizar", medicinas1);
+                    getServletContext().getRequestDispatcher("/DocumentosWeb/Farmacia/editarMedicina.jsp").forward(request, response);
+                } else {
+                    request.getSession().setAttribute("Guardado", "noEliminado");
+                    ArrayList<Medicina> medicinas1 = inventario.listarExistencias(conexion);
+                    request.setAttribute("medicinasActualizar", medicinas1);
+                    getServletContext().getRequestDispatcher("/DocumentosWeb/Farmacia/editarMedicina.jsp").forward(request, response);
+                }
+                break;
+            case "Generar Reporte":
+
+                break;
+
         }
     }
 

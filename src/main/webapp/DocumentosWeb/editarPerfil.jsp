@@ -21,9 +21,11 @@
         <% } else if ("Suscriptor".equals(session.getAttribute("rango"))) {
             System.out.println("se incluye rango " + session.getAttribute("rango"));
         %>
-        <%@include  file= "headerEnfermero.jsp"%>
+        <%@include  file= "headerEnfermeria.jsp"%>
         <% } else if (session.getAttribute("rango").equals("Administrador")) {%>
-        <%@include  file= "headerFarmaceuta.jsp"%>
+        <%@include  file= "headerAdministracion.jsp"%>
+        <%} } else if (session.getAttribute("rango").equals("Recepcionista")) {%>
+        <%@include  file= "headerRecepcionista.jsp"%>
         <%}%>
 
         <div id="seccion" class="contenido">

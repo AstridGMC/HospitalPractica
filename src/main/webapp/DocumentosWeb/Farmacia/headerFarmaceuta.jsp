@@ -28,7 +28,7 @@
         <nav>
             <div class="navbar1">
                 <a href="<%=request.getContextPath()%>/DocumentosWeb/Farmacia/paginaInicioF.jsp">Inicio</a>
-                <a href="<%=request.getContextPath()%>/EditarPerfil">Cambiar Imagen</a>
+                <a href="<%=request.getContextPath()%>/Empleados?pm=ModificarMiUsuario">Modificar Usuario</a>
                 <a href="<%=request.getContextPath()%>/RegistrarVentaNueva">Nueva Venta</a>
                 <a href="<%=request.getContextPath()%>/DocumentosWeb/Farmacia/medicinaNueva.jsp">Ingresar Medicina Nueva</a>
                 <div class="dropdown3">
@@ -38,6 +38,7 @@
                     <div class="dropdown-content1">
                         <a href="<%=request.getContextPath()%>/ActualizarInventario">Inventario</a>
                         <a href="<%=request.getContextPath()%>/RegistradorMedicina?pagina=ActualizarMedicina">Medicina</a>
+                        <a href="<%=request.getContextPath()%>/ManejadorPaciente?pm=ModificarPacientesF">Clientes</a>
                     </div>
                 </div>
                 <div class="dropdown3">
@@ -45,7 +46,7 @@
                         <i class="fa fa-caret-down"></i>
                     </button>
                     <div class="dropdown-content1">
-                        <a href="#">Inventario</a>
+                        <a href="<%=request.getContextPath()%>/DocumentosWeb/Farmacia/reportesMedicina.jsp">Inventario</a>
                         <a href="#">Ganancias</a>
                     </div>
                 </div>

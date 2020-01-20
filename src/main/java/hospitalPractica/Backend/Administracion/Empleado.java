@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 /**
  *
@@ -168,6 +169,24 @@ public class Empleado {
             return false;
         }
     }
+    public boolean modificarEmpleado(Connection conexion){
+        PreparedStatement ps1;
+        String sql = "UPDATE Empleado SET nombres = ?, apellidos = ?, telefono =  ? , salario =  ?  WHERE cuiEmpleado= ?;";
+        try {
+            ps1 = conexion.prepareStatement(sql);
+            ps1.setString(1, nombre);
+            ps1.setString(2, apellido);
+            ps1.setString(3, celular);
+            ps1.setFloat(4, salario);
+            ps1.setString(5, cui);
+            ps1.executeUpdate();
+            System.out.println("paciente Actualizado" + nombre + apellido + cui);
+            return true;
+        } catch (SQLException e) {
+            System.out.println("error al actualizar paciente " + cui + "  " + e);
+            return false;
+        }
+    }
 
     public boolean modificarVacaciones(Connection conexion, String fechaInicio, String fechaFinal, String fechaModificacion) {
         PreparedStatement ps1 = null;
@@ -183,5 +202,45 @@ public class Empleado {
             System.out.println("error No se ha modificado las vacaciones " + e);
             return false;
         }
+    }
+    public Empleado ObtenerInfoEmpleado(Connection conexion, String cui){
+        PreparedStatement validarNombre;
+        Empleado empleado = new Empleado();
+        try {
+            String consulta1 = "SELECT nombres, apellidos, cuiEmpleado, salario, telefono FROM Empleado WHERE cuiEmpleado = ?;";
+            validarNombre = conexion.prepareStatement(consulta1);
+            validarNombre.setString(1, cui);
+            ResultSet rs = validarNombre.executeQuery();
+            System.out.println(rs.first());
+            empleado.setNombre(rs.getString("nombres"));
+            empleado.setApellido(rs.getString("apellidos"));
+            empleado.setCelular(rs.getString("telefono"));
+            empleado.setSalario(rs.getFloat("salario"));
+            empleado.setCui(cui);
+            return empleado;
+        } catch (SQLException e) {
+            System.out.println("info paciente no encontrada " + e);
+            return null;
+        }
+    }
+    
+    public ArrayList<Empleado> listarEmpleados(Connection conexion){
+        PreparedStatement ps1;
+        ResultSet rs;
+        ArrayList<Empleado> list = new ArrayList<>();
+        String sql = "SELECT cuiEmpleado FROM Empleado";
+        try {
+            ps1 = conexion.prepareStatement(sql);
+            rs = ps1.executeQuery();
+
+            while (rs.next()) {
+                System.out.println(rs.getRow());
+                Empleado empleado = ObtenerInfoEmpleado(conexion, rs.getString("cuiEmpleado"));
+                list.add(empleado);
+            }
+        } catch (SQLException e) {
+            System.out.println("no se encontraron pacientes " + e);
+        }
+        return list;
     }
 }
