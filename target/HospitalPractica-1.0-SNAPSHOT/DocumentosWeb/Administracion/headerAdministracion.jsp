@@ -48,9 +48,10 @@
                     <div class="dropdown-content1">
                         <a href="<%=request.getContextPath()%>/Vacaciones?pm=Cambiar Numero De Dias">Cambiar Dias de Vacaciones</a>
                         <a href="<%=request.getContextPath()%>/Administracion?pm=nuevaArea">Agregar Nueva Area</a>
+                        <a href="<%=request.getContextPath()%>/Administracion?pm=modificacionAreas">Modificar Area</a>
                         <a href="<%=request.getContextPath()%>/Administracion?pm=numeroHabitacion">Agregar Habitacion nueva</a>
                         <a href="<%=request.getContextPath()%>/ManejadorAtencion?pm=nuevoServicioHospital">Agregar Servicio Hospital</a>
-                        <a href="<%=request.getContextPath()%>/ManejadorAtencion?pm=nuevoServicioEspecial">Agregar Servicio Especial</a>
+                        <a href="<%=request.getContextPath()%>/DocumentosWeb/Administracion/nuevoServicioEspecial.jsp">Agregar Servicio Especial</a>
                     </div>
                 </div>
                 <div class="dropdown3">

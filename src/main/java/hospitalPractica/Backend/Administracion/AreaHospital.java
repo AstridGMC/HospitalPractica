@@ -89,13 +89,13 @@ public class AreaHospital {
     public String obtenerNombreArea(Connection conexion, int idArea){
         PreparedStatement ps1 = null;
         ResultSet rs = null;
-        String sql = "SELECT noimbreArea FROM AreasHospital WHERE idAreaHospital = ? ;";
+        String sql = "SELECT nombreArea FROM AreasHospital WHERE idAreaHospital = ? ;";
         try {
             ps1 = conexion.prepareStatement(sql);
             ps1.setInt(1, idArea);
             rs = ps1.executeQuery();
             rs.first();
-            nombreArea = rs.getString("noimbreArea");
+            nombreArea = rs.getString("nombreArea");
             return nombreArea;
         } catch (SQLException e) {
             System.out.println("error leyendo Nombre Area" + e);
@@ -174,6 +174,39 @@ public class AreaHospital {
             System.out.println("no se pudo listar areas y rangos");
         }
         return areas;
+    }
+    
+     public boolean EliminarAreas(Connection conexion) {
+         System.out.println(idAreaHospital +" a eliminar.................");
+        PreparedStatement eliminarHabitacion = null;
+        String consulta = "DELETE FROM  AreasHospital WHERE idAreaHospital = ? ;";
+        try {
+            eliminarHabitacion = conexion.prepareStatement(consulta);
+            eliminarHabitacion.setInt(1, idAreaHospital);
+            eliminarHabitacion.executeUpdate();
+            System.out.println("Area eliminada de la base de datos");
+            return true;
+
+        } catch (SQLException e) {
+            System.out.println("error eliminando area de la base de datos " + e);
+            return false;
+        }
+    }
+     
+        public boolean actualizarAreas(Connection conexion){
+        PreparedStatement ps1;
+        String sql="UPDATE AreasHospital SET nombreArea = ?  WHERE idAreaHospital = ?;";
+        try {
+            ps1=conexion.prepareStatement(sql);
+            ps1.setString(1, nombreArea);
+            ps1.setFloat(2, idAreaHospital);
+            System.out.println(ps1.executeUpdate());
+            System.out.println("area actualizada");
+            return true;
+        } catch (SQLException e) {
+            System.out.println("error al actualizar la habitacion  "+ e);
+            return false;
+        }  
     }
    
 }

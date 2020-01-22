@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package Servlet;
+
 import hospitalPractica.Backend.Administracion.AreaHospital;
 import hospitalPractica.Backend.Administracion.CuartoHospital;
 import hospitalPractica.Backend.Paciente;
@@ -34,6 +35,7 @@ public class ManejadorAtencion extends HttpServlet {
     ServicioEspecial servicioEsp = new ServicioEspecial();
     Paciente paciente = new Paciente();
     Connection conexion = InicioSesion.conexion;
+    AreaHospital area = new AreaHospital();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -132,9 +134,85 @@ public class ManejadorAtencion extends HttpServlet {
                     getServletContext().getRequestDispatcher("/DocumentosWeb/Recepcion/registrarPacienteInternado.jsp").forward(request, response);
                 }
                 break;
+            case "Guardar Servicio Hospital":
+                String nombreServicio = request.getParameter("nombreServicio");
+                Float precio = Float.parseFloat(request.getParameter("precio"));
+                String areaS = request.getParameter("miArea");
+                System.out.println(areaS + "...............");
+                request.setAttribute("areas", area.listarAreas(conexion));
+                miServicio.setNombreServicio(nombreServicio);
+                miServicio.setPrecioServicio(precio);
+                if (miServicio.nuevoServicio(conexion, Integer.parseInt(request.getParameter("miArea")))) {
+                    request.getSession().setAttribute("Guardado", true);
+                    getServletContext().getRequestDispatcher("/DocumentosWeb/Administracion/nuevoServicioHospital.jsp").forward(request, response);
+                } else {
+                    request.getSession().setAttribute("Guardado", false);
+                    getServletContext().getRequestDispatcher("/DocumentosWeb/Administracion/nuevoServicioHospital.jsp").forward(request, response);
+                }
+                break;
+            case "Guardar Servicio Especial":
+                servicioEsp.setPagoEspecialista(Float.parseFloat(request.getParameter("pagoEspecialista")));
+                servicioEsp.setCosto(Float.parseFloat(request.getParameter("costo")));
+                servicioEsp.setNombreServicio(request.getParameter("nombreServicio"));
+                servicioEsp.setPrecio(Integer.parseInt(request.getParameter("precio")));
+                if (servicioEsp.nuevoServicioEspecial(conexion)) {
+                    request.setAttribute("servicio", miServicio.listarServicios(conexion));
+                    request.setAttribute("servicioEspecial", servicioEsp.listarServiciosEspeciales(conexion));
+                    getServletContext().getRequestDispatcher("/DocumentosWeb/Administracion/nuevoServicioEspecial.jsp").forward(request, response);
+                }
+                break;
+            case "Modificar Servicio":
+                miServicio.setNombreServicio(request.getParameter("nombreServicio"));
+                miServicio.setPrecioServicio(Float.parseFloat(request.getParameter("precio")));
+                if(miServicio.modificarPrecioServicio(conexion, Float.parseFloat(request.getParameter("precio")), miServicio.getNombreServicio())){
+                request.getSession().setAttribute("Guardado", true);
+                request.setAttribute("servicio", miServicio.listarServicios(conexion));
+                request.setAttribute("servicioEspecial", servicioEsp.listarServiciosEspeciales(conexion));
+                getServletContext().getRequestDispatcher("/DocumentosWeb/Administracion/modificarTarifario.jsp").forward(request, response);
+                }else{
+                    request.getSession().setAttribute("Guardado", false);
+                request.setAttribute("servicio", miServicio.listarServicios(conexion));
+                request.setAttribute("servicioEspecial", servicioEsp.listarServiciosEspeciales(conexion));
+                getServletContext().getRequestDispatcher("/DocumentosWeb/Administracion/modificarTarifario.jsp").forward(request, response);
+                   } 
+                    break;
+                
+                
+            case "Eliminar Servicio":
+                miServicio.setNombreServicio(request.getParameter("nombreServicio"));
+                if (miServicio.eliminarServicio(conexion, request.getParameter("nombreServicio"))) {
+                    request.setAttribute("servicio", miServicio.listarServicios(conexion));
+                    request.setAttribute("servicioEspecial", servicioEsp.listarServiciosEspeciales(conexion));
+                    getServletContext().getRequestDispatcher("/DocumentosWeb/Administracion/modificarTarifario.jsp").forward(request, response);
+                } else {
+                }
+                break;
+            case "Eliminar Servicio Especial":
+                if (servicioEsp.eliminarServicio(conexion, request.getParameter("nombreServicio"))) {
+                    request.setAttribute("servicio", miServicio.listarServicios(conexion));
+                    request.setAttribute("servicioEspecial", servicioEsp.listarServiciosEspeciales(conexion));
+                    getServletContext().getRequestDispatcher("/DocumentosWeb/Administracion/modificarTarifario.jsp").forward(request, response);
+                }
+                break;
+            case "Modificar Servicio Especial":
+                servicioEsp.setCosto(Float.parseFloat(request.getParameter("costo")));
+                servicioEsp.setNombreServicio(request.getParameter("nombre"));
+                servicioEsp.setPrecio(Integer.parseInt(request.getParameter("precio")));
+                servicioEsp.setPagoEspecialista(Float.parseFloat(request.getParameter("pagoEspecialista")));
+                if (servicioEsp.modificarPrecioServicio(conexion)) {
+                    request.setAttribute("servicio", miServicio.listarServicios(conexion));
+                    request.getSession().setAttribute("Guardado", true);
+                    request.setAttribute("servicioEspecial", servicioEsp.listarServiciosEspeciales(conexion));
+                    getServletContext().getRequestDispatcher("/DocumentosWeb/Administracion/modificarTarifario.jsp").forward(request, response);
+                }else{
+                    request.setAttribute("servicio", miServicio.listarServicios(conexion));
+                    request.getSession().setAttribute("Guardado", false);
+                    request.setAttribute("servicioEspecial", servicioEsp.listarServiciosEspeciales(conexion));
+                    getServletContext().getRequestDispatcher("/DocumentosWeb/Administracion/modificarTarifario.jsp").forward(request, response);
+                }
+                break;
         }
     }
-
     /**
      * Returns a short description of the servlet.
      *

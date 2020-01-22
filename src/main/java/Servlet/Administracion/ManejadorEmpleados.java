@@ -104,7 +104,6 @@ public class ManejadorEmpleados extends HttpServlet {
                 request.setAttribute("miUsuario", usuario.ObtenerInfoUsuario(conexion, cui));
                 getServletContext().getRequestDispatcher("/DocumentosWeb/actualizarUsuario.jsp").forward(request, response);
                 break;
-
         }
     }
 

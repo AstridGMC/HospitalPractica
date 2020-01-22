@@ -61,19 +61,23 @@ public class ManejadorPaciente extends HttpServlet {
         switch (param) {
             case "NuevaConsulta":
                 ArrayList<Servicio> servicios = miServicio.listarServicios(conexion);
-                request.setAttribute("Servicios", servicios);
+                request.setAttribute("servicios", servicios);
                 getServletContext().getRequestDispatcher("/DocumentosWeb/Recepcion/ingresarNuevaConsulta.jsp").forward(request, response);
 
                 break;
             case "ModificarPacientesR":
                 ArrayList<Paciente> pacientes = paciente.listarPacientes(conexion);
                 request.setAttribute("pacientes", pacientes);
+
                 getServletContext().getRequestDispatcher("/DocumentosWeb/Recepcion/actualizarClientes.jsp").forward(request, response);
                 break;
             case "ModificarPacientesF":
                 ArrayList<Paciente> pacientes1 = paciente.listarPacientes(conexion);
                 request.setAttribute("pacientes", pacientes1);
                 getServletContext().getRequestDispatcher("/DocumentosWeb/Farmacia/actualizarClientes.jsp").forward(request, response);
+                break;
+            case "cobrarServicios":
+                getServletContext().getRequestDispatcher("/DocumentosWeb/Recepcion/cobrarServicios.jsp").forward(request, response);
                 break;
         }
     }
@@ -106,27 +110,76 @@ public class ManejadorPaciente extends HttpServlet {
                     response.sendRedirect("DocumentosWeb/Recepcion/nuevoCliente.jsp");
                 }
                 break;
-            case "buscarCliente":
-                ArrayList<Servicio> servicios = miServicio.listarServicios(conexion);
-                request.setAttribute("Servicios", servicios);
+            case "buscar Servicios Cliente":
+              
+                
                 String cui = request.getParameter("cuiPaciente");
                 Paciente miPaciente = paciente.obtenerInfoPaciente(conexion, cui);
                 if (miPaciente != null) {
+                    request.setAttribute("serviciosClientes", miServicio.listarServiciosAdquiridosCliente(conexion, request.getParameter("cuiPaciente")));
+                    request.setAttribute("listar", "encontrado");
+                    request.setAttribute("paciente", miPaciente);
+                    request.setAttribute("encontrado", true);
+                    getServletContext().getRequestDispatcher("/DocumentosWeb/Recepcion/cobrarServicios.jsp").forward(request, response);
+                } else if (miPaciente == null) {
+                    ArrayList<Servicio> servicios2 = miServicio.listarServicios(conexion);
+                    request.setAttribute("servicios", servicios2);
+                    request.setAttribute("cui", cui);
+                    request.setAttribute("encontrado", false);
+                    getServletContext().getRequestDispatcher("/DocumentosWeb/Recepcion/cobrarServicios.jsp").forward(request, response);
+                }
+                break;
+            case "buscarCliente":
+                ArrayList<Servicio> servicios = miServicio.listarServicios(conexion);
+                request.setAttribute("Servicios", servicios);
+                cui = request.getParameter("cuiPaciente");
+                miPaciente = paciente.obtenerInfoPaciente(conexion, cui);
+                if (miPaciente != null) {
+                    request.setAttribute("serviciosClientes", miServicio.listarServiciosAdquiridosCliente(conexion, cui));
+                    ArrayList<Servicio> servicios2 = miServicio.listarServicios(conexion);
+                    request.setAttribute("servicios", servicios2);
                     request.setAttribute("paciente", miPaciente);
                     request.setAttribute("encontrado", true);
                     getServletContext().getRequestDispatcher("/DocumentosWeb/Recepcion/ingresarNuevaConsulta.jsp").forward(request, response);
                 } else if (miPaciente == null) {
+                    ArrayList<Servicio> servicios2 = miServicio.listarServicios(conexion);
+                    request.setAttribute("servicios", servicios2);
                     request.setAttribute("cui", cui);
                     request.setAttribute("encontrado", false);
                     getServletContext().getRequestDispatcher("/DocumentosWeb/Recepcion/ingresarNuevaConsulta.jsp").forward(request, response);
                 }
                 break;
-            case "Buscar Servicios Recibidos":
-                String cuiPacient = request.getParameter("cuiPaciente");
-
+            case "Guardar Servicio Cliente":
+                String fecha = request.getParameter("fecha") + " " + request.getParameter("hora");
+                System.out.println(fecha);
+                miServicio.setNombreServicio(request.getParameter("categoriaElegida"));
+                if (miServicio.RegistrarServicioAdquirido(conexion, request.getParameter("cuiCliente"), fecha)) {
+                    request.getSession().setAttribute("Guardado", "Guardado");
+                    ArrayList<Servicio> servicios2 = miServicio.listarServicios(conexion);
+                    request.setAttribute("servicios", servicios2);
+                    getServletContext().getRequestDispatcher("/DocumentosWeb/Recepcion/ingresarNuevaConsulta.jsp").forward(request, response);
+                } else {
+                    request.getSession().setAttribute("Guardado", "noGuardado");
+                    ArrayList<Servicio> servicios2 = miServicio.listarServicios(conexion);
+                    request.setAttribute("servicios", servicios2);
+                    getServletContext().getRequestDispatcher("/DocumentosWeb/Recepcion/ingresarNuevaConsulta.jsp").forward(request, response);
+                }
                 break;
-            case "Pagar Servicios Recibidos":
-
+            case "Cobrar Servicio":
+                miServicio.setNombreServicio(request.getParameter("nombre"));
+                miServicio.setPrecioServicio(Float.parseFloat(request.getParameter("precio")));
+                paciente.setCui(request.getParameter("cuiCliente"));
+                System.out.println(paciente.getCui());
+                miServicio.setCliente(paciente);
+                String fechaPago = request.getParameter("fecha");
+                System.out.println(fechaPago+"........");
+                miServicio.setAreaHospital(request.getParameter("area"));
+                if(miServicio.cobrarServicio(conexion, fechaPago)){
+                    getServletContext().getRequestDispatcher("/DocumentosWeb/Recepcion/cobrarServicios.jsp").forward(request, response);
+                }else{
+                    getServletContext().getRequestDispatcher("/DocumentosWeb/Recepcion/cobrarServicios.jsp").forward(request, response);
+                }
+                
                 break;
             case "Actualizar Paciente":
                 paciente.setNombres(request.getParameter("nombres"));

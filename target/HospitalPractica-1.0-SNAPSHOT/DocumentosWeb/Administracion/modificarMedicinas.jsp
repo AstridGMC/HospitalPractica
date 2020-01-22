@@ -40,7 +40,7 @@
                         <tr> 
                         <form action='<%=request.getContextPath()%>/Administracion' method='POST'>
                             <td id="11" value="<%=medicina.getNombre()%>"><%=medicina.getNombre()%> </td>
-                            <td><div> <input name='precio' type="text" id ="22"   value="<%=medicina.getPrecio()%>"></imput></div></td>
+                            <td><div> <input name='precio' type="text" id ="22"   value="<%=medicina.getPrecio()%>"></div></td>
                             <td> <div><input name='costo' style="width: 100px;" id="33" type="number"  value="<%=medicina.getCosto()%>"> </div> </td>
                             <td> <div ><input name='descripcion' style="width: 200px;"id="44" type="text"  value="<%=medicina.getDescripcion()%>"> </div></td>
                             <td id="55" ame='existenciaMinima' value="<%=medicina.getExistenciaMinima()%>"><%=medicina.getExistenciaMinima()%> </td>

@@ -79,7 +79,7 @@
                         <td name = "cui" id="11" value="<%=paciente.getCui()%>"><%=paciente.getCui()%></div></td>
                         <td ><div> <input  name = "nombres" oninput="capturar();" type="text" id ="22"   value= ' <%=paciente.getNombres()%>'></div></td>
                         <td ><div> <input  name = "apellidos" type="text" id ="22"   value= ' <%=paciente.getApellidos()%>'></div></td>
-                        <td  > <div><input name = "correo" style="width: 200px;" id="33" type="number"  value="<%=paciente.getCorreoElectronico()%>"> </div> </td>
+                        <td  > <div><input name = "correo" style="width: 200px;" id="33" type="text"  value="<%=paciente.getCorreoElectronico()%>"> </div> </td>
                         <td  > <div ><input  name = "telefono" style="width: 100px;"id="44" type="number" oninput="maxLengthCheck2(this)" value="<%=paciente.getTelfono()%>"> </div></td>
                         <td name = "suscribir" >
                             <div class="alert alert-success alert-dismissable">

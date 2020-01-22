@@ -5,7 +5,6 @@
 --%>
 
 <link href= "<%=request.getContextPath()%>/bootstrap/css/estiloBarra.css" rel="stylesheet" type ="text/css">
-<link href = "bootstrap/css/bootstrap.min.css" rel="stylesheet" type ="text/css">
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
@@ -43,8 +42,8 @@
                         <i class="fa fa-caret-down"></i>
                     </button>
                     <div class="dropdown-content1">
-                        <a href="<%=request.getContextPath()%>/ManejadorPaciente?pm=NuevaConsulta">Agendar Nueva Cita</a>
-                        <a href="#">Cobrar Cita</a>
+                        <a href="<%=request.getContextPath()%>/ManejadorPaciente?pm=NuevaConsulta">Agendar Servicio Cliente</a>
+                        <a href="<%=request.getContextPath()%>/ManejadorPaciente?pm=cobrarServicios">Cobrar Servicios</a>
                         <a href="#">Ver Citas</a>
                         <a href="#">Cambiar Citas</a>
                     </div>

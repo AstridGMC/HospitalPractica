@@ -41,10 +41,10 @@
                     </div>
                     <br>
                 </div>
-                <div>
+                     <div>
                     <h3>Rangos que perteneceran al Area</h3><br>
                     <c:forEach var="element" items="${rangos}">
-                        <label> <input type="checkbox" name="misRangos" value="${element}">${element}</label><br>
+                        <label> <input  type="checkbox" name="misRangos" value="${element}">${element}</label><br>
                         </c:forEach>
                     
                 </div>

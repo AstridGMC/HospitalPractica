@@ -73,19 +73,40 @@ public class Rango {
     }
 
     public boolean agregarRangosAreas(Connection conexion, String[] misRangos, int idArea) {
+        boolean pa1 = false;
         String sql = "INSERT INTO Dispone (rango, idAreaHospital) VALUES (?, ?)";
         PreparedStatement ps1;
         System.out.println(idArea);
         try {
+            if(misRangos != null){
             for (int i = 0; i < misRangos.length; i++) {
                 ps1 = conexion.prepareStatement(sql);
                 ps1.setString(1, misRangos[i]);
                 ps1.setInt(2, idArea);
                 ps1.executeUpdate();
+                 pa1= true;
+            }}else{
+                pa1= true;
             }
-            return true;
         } catch (SQLException e) {
             System.out.println("no se pudo agregar rangos " + e);
+            pa1= false;
+        }
+        return pa1;
+    }
+    
+     public boolean eliminarRangosAreas(Connection conexion, int idArea) {
+      PreparedStatement eliminarHabitacion = null;
+        String consulta = "DELETE FROM  Dispone WHERE idAreaHospital = ? ;";
+        try {
+            eliminarHabitacion = conexion.prepareStatement(consulta);
+            eliminarHabitacion.setInt(1, idArea);
+            eliminarHabitacion.executeUpdate();
+            System.out.println("rangos eliminados Area de la base de datos");
+            return true;
+
+        } catch (SQLException e) {
+            System.out.println("error eliminando rangos Area de la base de datos " + e);
             return false;
         }
 

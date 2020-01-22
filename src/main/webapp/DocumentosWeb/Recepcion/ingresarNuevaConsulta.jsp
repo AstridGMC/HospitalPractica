@@ -16,8 +16,25 @@
     </head>
     <body>
         <%@include  file= "headerRecepcionista.jsp"%>
+        <%  
+            if (session.getAttribute("Guardado") != null) {
+                String strExpired = (String) session.getAttribute("Guardado");
+                System.out.println(strExpired);
+                if (strExpired.equals("Guardado")) {
+                    session.setAttribute("Guardado", null);
+                %>
+                <script>
+                    alert("Servicio Registrado");
+                </script>
+                <% } else if (strExpired.equals("noGuardado")) {
+                    session.setAttribute("Guardado", null);%>
+                <script>
+                    alert(" el servicio  no ha podido registrarse");
+                </script>
+                <% }
+            }%>
         <div  style="padding-top: 320px; padding-left: 16%;">
-            <h1>Registrar Nueva Consulta</h1>
+            <h1>Registrar Servicio</h1>
             <div class="col-sm-10" id="div2">
                 <div id="div5">
                     <form action='<%=request.getContextPath()%>/ManejadorPaciente' method='POST'>
@@ -27,12 +44,13 @@
                         <input type="submit" name="boton" id="botonBuscar" value="buscarCliente">
                     </form>
                 </div>
+           <form action='<%=request.getContextPath()%>/ManejadorPaciente' method='POST'>
                 <%Paciente paciente = (Paciente) request.getAttribute("paciente");
                     if (request.getAttribute("encontrado") != null) {
                         if ((boolean) request.getAttribute("encontrado")) {
                             System.out.println(paciente.getNombres());
                 %>
-
+                <input type="text" style="display: none" name="cuiCliente" value="<%=paciente.getCui()%>">
                 <div id="infoCliente" >
                     <label>Nombre:</label>
                     <label class="info"> <%=paciente.getNombres()%> <%=paciente.getApellidos()%></label>
@@ -50,27 +68,29 @@
                     }%>
             </div>
             <div id="datosConsulta">
-                <form action='<%=request.getContextPath()%>/ManejadorPaciente' method='POST'>
-
+               
+                    
+                    
                     <div class="form-group" id="div4">
                         <br>
-                        <label>Tipo Consulta</label> 
-                        <select name = "categoriaElegida">
-                            <c:forEach var="element.getNombre()" items="${Servicios}">
-                                <option value="${element.getNombre()}">${element.getNombre()}</option>
-                            </c:forEach>
-                        </select>
-                        <div class="form-group" id="div1">
-                            <label class="titulos" id="as">Fecha Consulta </label>
+                        <div style="font-size:30px;">
+                            <label>Tipo Consulta</label> 
+                            <select name = "categoriaElegida">
+                                <c:forEach var="element" items="${servicios}">
+                                    <option  value="${element.getNombreServicio()}"> ${element.getNombreServicio()}  Precio: Q. ${element.getPrecioServicio()}   </option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                        <div class="form-group" id="div1" style="font-size:30px;">
                             <div class="col-sm-10">
-                                <input class="fechas" type="date" name="fecha" size="20" required>
+                                Fecha Consulta <input class="fechas" type="date" name="fecha" size="20" required>
                             </div>
                             <div>
                                 <input name="rango" value="Recepcionista" style="display: none;">
-                                <input type="time" name="hora" min="08:00" max="18:00" step="3600">
+                                Hora: <input type="time" name="hora" min="08:00" max="18:00" step="3600">
                             </div>
                         </div>
-                        <input type="submit" name='boton' id="boton" class="btn btn-success"     value="Guardar">
+                        <input type="submit" name='boton' id="boton" class="btn btn-success"     value="Guardar Servicio Cliente">
                     </div>
                 </form>
             </div>
